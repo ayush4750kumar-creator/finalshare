@@ -40,7 +40,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 #login-screen h1{font-size:36px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
 #login-screen p{font-size:15px;color:var(--text2);margin-top:4px;font-weight:400;text-align:center}
 .spotify-btn{display:flex;align-items:center;gap:10px;background:var(--green);color:#fff;font-family:var(--font);font-weight:600;font-size:15px;padding:13px 26px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px var(--green-glow)}
-.spotify-btn:hover{background:hsl(0, 0%, 0%);transform:translateY(-1px)}
+.spotify-btn:hover{background:hsl(0,0%,0%);transform:translateY(-1px)}
 .spotify-btn svg{width:20px;height:20px}
 
 .app{display:flex;height:100vh;overflow:hidden}
@@ -104,6 +104,24 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 .tab-btn{padding:5px 12px;border-radius:50px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;font-family:var(--font)}
 .tab-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
 
+/* ── Merged "Aman is playing" card ── */
+.merged-playing-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
+.merged-playing-card:hover{border-color:var(--border2);box-shadow:var(--shadow-md)}
+.mc-top-row{display:flex;align-items:center;gap:12px}
+.mc-avatar{width:42px;height:42px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden}
+.mc-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.mc-user-meta{flex:1;min-width:0}
+.mc-user-name{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.2px}
+.mc-user-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.mc-live-pill{display:inline-flex;align-items:center;gap:5px;background:var(--green-light);border:1px solid var(--green-border);color:var(--green);padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;letter-spacing:.4px;flex-shrink:0}
+.mc-divider{height:1px;background:var(--border);margin:14px 0}
+.mc-track-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.mc-art{width:46px;height:46px;border-radius:8px;flex-shrink:0;background:var(--bg3);overflow:hidden;box-shadow:var(--shadow)}
+.mc-art img{width:100%;height:100%;object-fit:cover}
+.mc-track-meta{flex:1;min-width:0}
+.mc-track-name{font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.2px}
+.mc-track-artist{font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+
 .now-playing-card{background:var(--green-light);border:1px solid var(--green-border);border-radius:var(--radius);padding:18px;margin-bottom:20px}
 .np-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .np-art{width:60px;height:60px;border-radius:10px;flex-shrink:0;background:var(--bg3);overflow:hidden;box-shadow:var(--shadow-md)}
@@ -124,17 +142,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 .progress-times span{font-size:10px;color:var(--text3);font-weight:500}
 .open-spotify{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;background:#fff;border:1px solid var(--green-border);color:var(--green);font-size:11px;font-weight:600;text-decoration:none;transition:all .15s}
 .open-spotify:hover{background:var(--green);color:#fff}
-
-.feed-header-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);flex-wrap:wrap}
-.feed-header-card:hover{border-color:var(--green);box-shadow:0 4px 16px var(--green-glow)}
-.feed-user-avatar{width:48px;height:48px;border-radius:50%;flex-shrink:0;overflow:hidden;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff}
-.feed-user-avatar img{width:100%;height:100%;object-fit:cover}
-.feed-user-info{flex:1;min-width:0}
-.feed-user-name{font-size:15px;font-weight:700;letter-spacing:-.2px;margin-bottom:3px;color:var(--text)}
-.feed-user-sub{font-size:12px;color:var(--text3)}
-.feed-now-playing{text-align:right;flex-shrink:0;max-width:180px}
-.feed-np-track{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.feed-np-artist{font-size:11px;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 .friend-activity-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:8px;display:flex;gap:12px;align-items:center;transition:all .2s;cursor:pointer;box-shadow:var(--shadow)}
 .friend-activity-card:hover{border-color:var(--border2);box-shadow:var(--shadow-md)}
@@ -231,7 +238,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
   .stat-card{padding:10px 8px}
   .stat-value{font-size:20px}
   .discover-grid{grid-template-columns:1fr}
-  .feed-now-playing{display:none!important}
   .profile-name{font-size:18px}
 }
 @media(max-width:400px){
@@ -308,37 +314,39 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 
     <div class="content">
       <div class="page active" id="page-feed">
-        <div class="feed-header-card" onclick="showPage('profile',null)">
-          <div class="feed-user-avatar" id="feed-my-avatar">?</div>
-          <div class="feed-user-info">
-            <div class="feed-user-name" id="feed-my-name">You</div>
-            <div class="feed-user-sub" id="feed-my-sub">Tap to view your profile</div>
-          </div>
-          <div class="feed-now-playing" id="feed-my-np" style="display:none">
-            <div class="live-badge" style="margin-bottom:5px"><div class="live-dot"></div>NOW PLAYING</div>
-            <div class="feed-np-track" id="feed-my-track">—</div>
-            <div class="feed-np-artist" id="feed-my-artist">—</div>
-          </div>
-        </div>
-        <div id="np-card" style="display:none" class="now-playing-card">
-          <div style="font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.6px;margin-bottom:12px;text-transform:uppercase">Now Playing</div>
-          <div class="np-row">
-            <div class="np-art"><img id="np-img" src="" alt=""/></div>
-            <div class="np-meta">
-              <div class="live-badge"><div class="live-dot"></div>LIVE</div>
-              <div class="np-track" id="np-track">—</div>
-              <div class="np-artist" id="np-artist">—</div>
+
+        <!-- ── Merged "Aman is playing" card ── -->
+        <div class="merged-playing-card" id="merged-card-wrap" onclick="showPage('profile',null)">
+          <div class="mc-top-row">
+            <div class="mc-avatar" id="merged-avatar">?</div>
+            <div class="mc-user-meta">
+              <div class="mc-user-name" id="merged-name">You</div>
+              <div class="mc-user-sub" id="merged-sub">Tap to view your profile</div>
             </div>
-            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-              <div class="np-waveform"><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div></div>
-              <a id="np-link" class="open-spotify" href="#" target="_blank">Open</a>
+            <div class="mc-live-pill" id="merged-live" style="display:none">
+              <div class="live-dot"></div>LIVE
             </div>
           </div>
-          <div class="progress-wrap">
-            <div class="progress-bar"><div class="progress-fill" id="np-progress" style="width:0%"></div></div>
-            <div class="progress-times"><span id="np-elapsed">0:00</span><span id="np-total">0:00</span></div>
+          <div id="merged-divider" style="display:none;height:1px;background:var(--border);margin:14px 0"></div>
+          <div id="merged-track-section" style="display:none">
+            <div class="mc-track-row">
+              <div class="mc-art"><img id="merged-img" src="" alt=""/></div>
+              <div class="mc-track-meta">
+                <div class="mc-track-name" id="merged-track">—</div>
+                <div class="mc-track-artist" id="merged-artist">—</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+                <div class="np-waveform"><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div></div>
+                <a id="merged-link" class="open-spotify" href="#" target="_blank" onclick="event.stopPropagation()">Open</a>
+              </div>
+            </div>
+            <div class="progress-wrap" style="margin-top:4px">
+              <div class="progress-bar"><div class="progress-fill" id="merged-progress" style="width:0%"></div></div>
+              <div class="progress-times"><span id="merged-elapsed">0:00</span><span id="merged-total">0:00</span></div>
+            </div>
           </div>
         </div>
+
         <div class="section-title mt-20">Friends Activity</div>
         <div id="friends-feed"><div class="loading">Loading friends…</div></div>
       </div>
@@ -368,7 +376,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
             </div>
           </div>
         </div>
-       
         <div class="divider"></div>
         <div class="section-title mt-20">Recent History</div>
         <div id="profile-recent"><div class="loading">Loading…</div></div>
@@ -433,12 +440,12 @@ async function loadUser() {
   if (user.error) return;
   window._user = user;
   document.getElementById('chip-name').textContent = user.name || 'You';
-  document.getElementById('feed-my-name').textContent = user.name || 'You';
+  document.getElementById('merged-name').textContent = user.name || 'You';
   if (user.image) {
     document.getElementById('chip-avatar').innerHTML = `<img src="${user.image}" alt=""/>`;
-    document.getElementById('feed-my-avatar').innerHTML = `<img src="${user.image}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt=""/>`;
+    document.getElementById('merged-avatar').innerHTML = `<img src="${user.image}" alt=""/>`;
   } else {
-    document.getElementById('feed-my-avatar').textContent = (user.name||'Y')[0].toUpperCase();
+    document.getElementById('merged-avatar').textContent = (user.name||'Y')[0].toUpperCase();
   }
 }
 
@@ -448,43 +455,52 @@ async function loadNowPlaying() {
     const data = await res.json();
     if (data.playing && data.track) {
       const t = data.track;
-      document.getElementById('feed-my-np').style.display='block';
-      document.getElementById('feed-my-track').textContent=t.name;
-      document.getElementById('feed-my-artist').textContent=t.artist;
-      document.getElementById('feed-my-sub').textContent='🎵 Currently listening';
-      document.getElementById('np-card').style.display='block';
-      document.getElementById('np-img').src=t.image||'';
-      document.getElementById('np-track').textContent=t.name;
-      document.getElementById('np-artist').textContent=t.artist;
-      document.getElementById('np-link').href=t.url||'#';
-      document.getElementById('np-total').textContent=fmtMs(t.duration_ms);
-      updateProgress(t.progress_ms,t.duration_ms);
+      // Show the track section inside the merged card
+      document.getElementById('merged-live').style.display = 'inline-flex';
+      document.getElementById('merged-divider').style.display = 'block';
+      document.getElementById('merged-track-section').style.display = 'block';
+      document.getElementById('merged-sub').textContent = '🎵 Currently listening';
+      document.getElementById('merged-img').src = t.image || '';
+      document.getElementById('merged-track').textContent = t.name;
+      document.getElementById('merged-artist').textContent = t.artist;
+      document.getElementById('merged-link').href = t.url || '#';
+      document.getElementById('merged-total').textContent = fmtMs(t.duration_ms);
+      updateProgress(t.progress_ms, t.duration_ms);
       clearInterval(progressInterval);
-      let elapsed=t.progress_ms;
-      progressInterval=setInterval(()=>{ elapsed+=1000; if(elapsed>=t.duration_ms){clearInterval(progressInterval);return;} updateProgress(elapsed,t.duration_ms); },1000);
-      document.getElementById('profile-np-card').style.display='block';
-      document.getElementById('pnp-img').src=t.image||'';
-      document.getElementById('pnp-track').textContent=t.name;
-      document.getElementById('pnp-artist').textContent=t.artist;
-      document.getElementById('pnp-link').href=t.url||'#';
-      document.getElementById('mini-player').style.display='block';
-      document.getElementById('mini-img').src=t.image||'';
-      document.getElementById('mini-track').textContent=t.name;
-      document.getElementById('mini-artist').textContent=t.artist;
-      document.getElementById('mini-wave').classList.toggle('paused',!data.playing);
+      let elapsed = t.progress_ms;
+      progressInterval = setInterval(() => {
+        elapsed += 1000;
+        if (elapsed >= t.duration_ms) { clearInterval(progressInterval); return; }
+        updateProgress(elapsed, t.duration_ms);
+      }, 1000);
+      // Profile page NP card
+      document.getElementById('profile-np-card').style.display = 'block';
+      document.getElementById('pnp-img').src = t.image || '';
+      document.getElementById('pnp-track').textContent = t.name;
+      document.getElementById('pnp-artist').textContent = t.artist;
+      document.getElementById('pnp-link').href = t.url || '#';
+      // Mini sidebar player
+      document.getElementById('mini-player').style.display = 'block';
+      document.getElementById('mini-img').src = t.image || '';
+      document.getElementById('mini-track').textContent = t.name;
+      document.getElementById('mini-artist').textContent = t.artist;
+      document.getElementById('mini-wave').classList.toggle('paused', !data.playing);
     } else {
-      ['np-card','profile-np-card'].forEach(id=>document.getElementById(id).style.display='none');
-      document.getElementById('feed-my-np').style.display='none';
-      document.getElementById('feed-my-sub').textContent='Not listening to anything right now';
-      document.getElementById('mini-player').style.display='none';
+      // Not playing — collapse track section
+      document.getElementById('merged-live').style.display = 'none';
+      document.getElementById('merged-divider').style.display = 'none';
+      document.getElementById('merged-track-section').style.display = 'none';
+      document.getElementById('merged-sub').textContent = 'Not listening to anything right now';
+      document.getElementById('profile-np-card').style.display = 'none';
+      document.getElementById('mini-player').style.display = 'none';
       clearInterval(progressInterval);
     }
   } catch(e) {}
 }
 
-function updateProgress(elapsed,total) {
-  document.getElementById('np-progress').style.width=Math.min(100,(elapsed/total)*100)+'%';
-  document.getElementById('np-elapsed').textContent=fmtMs(elapsed);
+function updateProgress(elapsed, total) {
+  document.getElementById('merged-progress').style.width = Math.min(100, (elapsed/total)*100) + '%';
+  document.getElementById('merged-elapsed').textContent = fmtMs(elapsed);
 }
 
 async function loadFriendsFeed() {
@@ -560,6 +576,7 @@ async function loadTop(range,btn) {
   if(btn)btn.classList.add('active');
   const tEl=document.getElementById('top-tracks-list');
   const aEl=document.getElementById('top-artists-grid');
+  if(!tEl||!aEl)return;
   tEl.innerHTML='<div class="loading">Loading…</div>';aEl.innerHTML='';
   try {
     const [tRes,aRes]=await Promise.all([fetch(`${API}/top-tracks?range=${range}`,{headers:authHeaders()}),fetch(`${API}/top-artists?range=${range}`,{headers:authHeaders()})]);
