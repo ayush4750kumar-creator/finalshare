@@ -92,7 +92,7 @@ async function spotifyGet(tokenObj, endpoint) {
 // ─── Auth Routes ──────────────────────────────────────────────────────────────
 app.get('/api/auth/spotify', (req, res) => {
   const state = crypto.randomBytes(16).toString('hex');
-  res.cookie("oauth_state", state, { httpOnly: true, secure: true, sameSite: "none", maxAge: 60000 });
+  
   
   const params = new URLSearchParams({
     response_type: 'code',
@@ -107,8 +107,8 @@ app.get('/api/auth/spotify', (req, res) => {
 app.get('/api/auth/spotify/callback', async (req, res) => {
   const { code, state, error } = req.query;
   if (error) return res.redirect(`${FRONTEND_URL}?error=${error}`);
-  if (!state || state !== req.cookies["oauth_state"]) return res.redirect(`${FRONTEND_URL}?error=state_mismatch`);
-  res.clearCookie("oauth_state");
+  
+  
 
   try {
     const tokenRes = await axios.post('https://accounts.spotify.com/api/token',
