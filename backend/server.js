@@ -6,8 +6,6 @@ const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'waveshare-jwt-secret';
-const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET || 'waveshare-jwt-secret';
 const path = require('path');
 require('dotenv').config();
 
