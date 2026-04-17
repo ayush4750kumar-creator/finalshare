@@ -19,61 +19,27 @@
   --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--display:'Syne',sans-serif;
 }
 body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;overflow:hidden}
-
-/* ─── Login ─── */
-#login-screen{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  height:100vh;gap:32px;
-  background:radial-gradient(ellipse 60% 40% at 50% 0%,#0d2a1a 0%,var(--bg) 70%);
-}
-.logo-mark{
-  width:72px;height:72px;border-radius:50%;
-  background:linear-gradient(135deg,var(--green),#0ea85a);
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 18px;box-shadow:0 0 40px var(--green-glow);
-  animation:float 3s ease-in-out infinite;
-}
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:32px;background:radial-gradient(ellipse 60% 40% at 50% 0%,#0d2a1a 0%,var(--bg) 70%)}
+.logo-mark{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--green),#0ea85a);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;box-shadow:0 0 40px var(--green-glow);animation:float 3s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 #login-screen h1{font-family:var(--display);font-size:42px;font-weight:800;letter-spacing:-1px}
 #login-screen p{font-size:16px;color:var(--text2);margin-top:6px;font-weight:300}
-.spotify-btn{
-  display:flex;align-items:center;gap:12px;
-  background:var(--green);color:#000;
-  font-family:var(--display);font-weight:700;font-size:15px;
-  padding:14px 28px;border-radius:50px;border:none;cursor:pointer;
-  transition:all .2s;box-shadow:0 4px 24px var(--green-glow);
-}
+.spotify-btn{display:flex;align-items:center;gap:12px;background:var(--green);color:#000;font-family:var(--display);font-weight:700;font-size:15px;padding:14px 28px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px var(--green-glow)}
 .spotify-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(31,223,100,.3)}
 .spotify-btn svg{width:22px;height:22px}
-
-/* ─── App Shell ─── */
 .app{display:flex;height:100vh;overflow:hidden}
-
-/* ─── Sidebar ─── */
-.sidebar{
-  width:230px;flex-shrink:0;background:var(--bg2);
-  border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;
-}
-.sidebar-logo{
-  padding:22px 18px 14px;display:flex;align-items:center;gap:11px;
-  border-bottom:1px solid var(--border);
-}
+.sidebar{width:230px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sidebar-logo{padding:22px 18px 14px;display:flex;align-items:center;gap:11px;border-bottom:1px solid var(--border)}
 .logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--green),#0ea85a);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .logo-icon svg{width:17px;height:17px;fill:#000}
 .logo-text{font-family:var(--display);font-size:17px;font-weight:800;letter-spacing:-.4px}
 .nav{padding:10px 8px 0;flex-shrink:0}
-.nav-item{
-  display:flex;align-items:center;gap:11px;padding:10px 11px;border-radius:var(--radius-sm);
-  cursor:pointer;color:var(--text2);font-size:13px;font-weight:500;
-  transition:all .15s;margin-bottom:2px;
-}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 11px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);font-size:13px;font-weight:500;transition:all .15s;margin-bottom:2px}
 .nav-item:hover{background:var(--bg3);color:var(--text)}
 .nav-item.active{background:var(--bg4);color:var(--text)}
 .nav-item svg{width:17px;height:17px;flex-shrink:0;opacity:.7}
 .nav-item.active svg{opacity:1}
 .sidebar-section{padding:18px 18px 8px;font-family:var(--mono);font-size:10px;font-weight:500;color:var(--text3);letter-spacing:1.2px;text-transform:uppercase}
-
-/* ─── Friends in sidebar ─── */
 #sidebar-friends{overflow-y:auto;flex:1}
 .friend-item{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;transition:background .15s}
 .friend-item:hover{background:var(--bg3)}
@@ -81,14 +47,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .av-sm{width:30px;height:30px;font-size:11px}
 .status-ring{position:relative;border-radius:50%}
 .status-ring::after{content:'';position:absolute;bottom:0;right:0;width:9px;height:9px;border-radius:50%;border:2px solid var(--bg2)}
-.status-ring.online::after{background:var(--green)}
 .status-ring.offline::after{background:var(--text3)}
 .status-ring.playing::after{background:var(--green);animation:pulse 1.5s infinite}
 .friend-info{flex:1;min-width:0}
 .friend-name{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .friend-song{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
-
-/* ─── Mini now playing ─── */
 .now-playing-mini{margin:auto 0 0;padding:14px;border-top:1px solid var(--border);background:var(--bg2)}
 .npm-inner{display:flex;align-items:center;gap:10px;background:var(--bg3);border-radius:var(--radius-sm);padding:10px 11px}
 .npm-art{width:36px;height:36px;border-radius:6px;flex-shrink:0;background:var(--bg4);overflow:hidden}
@@ -98,13 +61,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .npm-artist{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
 .waveform{display:flex;align-items:center;gap:2px;height:18px;flex-shrink:0}
 .wave-bar{width:2.5px;border-radius:2px;background:var(--green);animation:wave 1.2s infinite ease-in-out}
-.wave-bar:nth-child(1){animation-delay:0s;height:5px}.wave-bar:nth-child(2){animation-delay:.15s;height:11px}
-.wave-bar:nth-child(3){animation-delay:.3s;height:16px}.wave-bar:nth-child(4){animation-delay:.45s;height:9px}
-.wave-bar:nth-child(5){animation-delay:.6s;height:13px}
+.wave-bar:nth-child(1){animation-delay:0s;height:5px}.wave-bar:nth-child(2){animation-delay:.15s;height:11px}.wave-bar:nth-child(3){animation-delay:.3s;height:16px}.wave-bar:nth-child(4){animation-delay:.45s;height:9px}.wave-bar:nth-child(5){animation-delay:.6s;height:13px}
 @keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.3)}}
 .waveform.paused .wave-bar{animation:none;height:5px}
-
-/* ─── Main Content ─── */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .topbar{height:58px;flex-shrink:0;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 22px;gap:12px}
 .page-title{font-family:var(--display);font-size:17px;font-weight:800;flex:1;letter-spacing:-.3px}
@@ -115,26 +74,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .chip-name{font-size:12px;font-weight:500;color:var(--text2)}
 .logout-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:50px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:12px;cursor:pointer;transition:all .15s;font-family:var(--sans)}
 .logout-btn:hover{color:var(--red);border-color:var(--red)}
-
 .content{flex:1;overflow-y:auto;padding:22px}
 .content::-webkit-scrollbar{width:4px}
 .content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-
-/* ─── Typography ─── */
 .section-title{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--text3);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:14px}
 .section-tab-row{display:flex;gap:6px;margin-bottom:18px}
 .tab-btn{padding:5px 12px;border-radius:50px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:12px;cursor:pointer;transition:all .15s;font-family:var(--sans)}
 .tab-btn.active{background:var(--bg4);color:var(--text);border-color:var(--border2)}
-
-/* ─── Now Playing Card (own) ─── */
-.now-playing-card{
-  background:linear-gradient(135deg,var(--bg3),var(--bg4));border:1px solid var(--border2);
-  border-radius:var(--radius);padding:20px;margin-bottom:22px;position:relative;overflow:hidden;
-}
-.now-playing-card::before{
-  content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;
-  background:radial-gradient(circle,var(--green-dim),transparent 70%);pointer-events:none;
-}
+.now-playing-card{background:linear-gradient(135deg,var(--bg3),var(--bg4));border:1px solid var(--border2);border-radius:var(--radius);padding:20px;margin-bottom:22px;position:relative;overflow:hidden}
+.now-playing-card::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,var(--green-dim),transparent 70%);pointer-events:none}
 .np-row{display:flex;align-items:center;gap:14px}
 .np-art{width:64px;height:64px;border-radius:10px;flex-shrink:0;background:var(--bg4);overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 .np-art img{width:100%;height:100%;object-fit:cover}
@@ -146,9 +94,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .np-artist{font-size:13px;color:var(--text2);margin-top:3px}
 .np-waveform{display:flex;align-items:center;gap:3px;height:24px;flex-shrink:0}
 .np-bar{width:3px;border-radius:3px;background:var(--green);animation:wave 1.2s infinite ease-in-out}
-.np-bar:nth-child(1){height:7px}.np-bar:nth-child(2){animation-delay:.12s;height:15px}
-.np-bar:nth-child(3){animation-delay:.24s;height:22px}.np-bar:nth-child(4){animation-delay:.36s;height:12px}
-.np-bar:nth-child(5){animation-delay:.48s;height:18px}.np-bar:nth-child(6){animation-delay:.6s;height:10px}
+.np-bar:nth-child(1){height:7px}.np-bar:nth-child(2){animation-delay:.12s;height:15px}.np-bar:nth-child(3){animation-delay:.24s;height:22px}.np-bar:nth-child(4){animation-delay:.36s;height:12px}.np-bar:nth-child(5){animation-delay:.48s;height:18px}.np-bar:nth-child(6){animation-delay:.6s;height:10px}
 .progress-wrap{margin-top:14px}
 .progress-bar{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#0ea85a);border-radius:2px;transition:width 1s linear}
@@ -156,13 +102,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .progress-times span{font-family:var(--mono);font-size:10px;color:var(--text3)}
 .open-spotify{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:50px;background:var(--green-dim);border:1px solid #1fdf6420;color:var(--green);font-size:11px;font-family:var(--mono);text-decoration:none;transition:all .15s}
 .open-spotify:hover{background:#1fdf6418}
-
-/* ─── Social Feed Cards ─── */
-.feed-header-card{
-  background:linear-gradient(135deg,var(--bg3),var(--bg4));border:1px solid var(--border2);
-  border-radius:var(--radius);padding:18px;margin-bottom:22px;
-  display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .2s;
-}
+.feed-header-card{background:linear-gradient(135deg,var(--bg3),var(--bg4));border:1px solid var(--border2);border-radius:var(--radius);padding:18px;margin-bottom:22px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .2s}
 .feed-header-card:hover{border-color:var(--green)}
 .feed-user-avatar{width:52px;height:52px;border-radius:50%;flex-shrink:0;overflow:hidden;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:20px;font-weight:800;color:var(--green)}
 .feed-user-avatar img{width:100%;height:100%;object-fit:cover}
@@ -172,14 +112,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .feed-now-playing{text-align:right;flex-shrink:0}
 .feed-np-track{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
 .feed-np-artist{font-size:11px;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
-
-/* Friend activity cards */
-.friend-feed-section{margin-bottom:8px}
-.friend-activity-card{
-  background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
-  padding:16px;margin-bottom:10px;display:flex;gap:14px;align-items:center;
-  transition:border-color .2s;cursor:pointer;
-}
+.friend-activity-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;display:flex;gap:14px;align-items:center;transition:border-color .2s;cursor:pointer}
 .friend-activity-card:hover{border-color:var(--border2)}
 .fac-avatar{width:44px;height:44px;border-radius:50%;flex-shrink:0;overflow:hidden;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:16px;font-weight:800;position:relative}
 .fac-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
@@ -195,29 +128,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .fac-idle{font-size:12px;color:var(--text3);font-style:italic}
 .fac-mini-wave{display:flex;align-items:center;gap:2px;height:16px;flex-shrink:0}
 .fac-mini-wave .wave-bar{height:8px}
-
-/* ─── Following / Discover ─── */
 .discover-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:24px}
-.discover-card{
-  background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
-  padding:16px;display:flex;align-items:center;gap:12px;transition:all .2s;
-}
+.discover-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;align-items:center;gap:12px;transition:all .2s}
 .discover-card:hover{border-color:var(--border2);background:var(--bg4)}
 .dc-avatar{width:44px;height:44px;border-radius:50%;flex-shrink:0;overflow:hidden;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:17px;font-weight:800}
 .dc-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .dc-info{flex:1;min-width:0}
 .dc-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
 .dc-sub{font-size:11px;color:var(--text3)}
-.follow-btn{
-  padding:5px 12px;border-radius:50px;border:1px solid var(--border2);
-  background:transparent;color:var(--text2);font-size:11px;cursor:pointer;
-  transition:all .15s;font-family:var(--sans);white-space:nowrap;flex-shrink:0;
-}
+.follow-btn{padding:5px 12px;border-radius:50px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:11px;cursor:pointer;transition:all .15s;font-family:var(--sans);white-space:nowrap;flex-shrink:0}
 .follow-btn:hover{background:var(--green-dim);border-color:var(--green);color:var(--green)}
 .follow-btn.following{background:var(--green-dim);border-color:var(--green);color:var(--green)}
 .follow-btn.following:hover{background:#f8717120;border-color:var(--red);color:var(--red)}
-
-/* ─── Track List ─── */
 .track-list{display:flex;flex-direction:column;gap:6px}
 .track-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid transparent;transition:all .15s;cursor:pointer}
 .track-item:hover{background:var(--bg3);border-color:var(--border)}
@@ -229,8 +151,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .track-artist{font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 .track-pop{width:36px;height:4px;background:var(--bg4);border-radius:2px;flex-shrink:0;overflow:hidden}
 .track-pop-fill{height:100%;background:var(--accent);border-radius:2px}
-
-/* ─── Artists Grid ─── */
 .artists-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .artist-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;cursor:pointer;transition:all .2s}
 .artist-card:hover{background:var(--bg4);border-color:var(--border2);transform:translateY(-2px)}
@@ -238,18 +158,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .artist-img img{width:100%;height:100%;object-fit:cover}
 .artist-name{font-family:var(--display);font-size:13px;font-weight:700;margin-bottom:4px}
 .artist-genre{font-size:11px;color:var(--text3)}
-
-/* ─── Recent Tracks ─── */
 .recent-item{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:var(--radius-sm);transition:background .15s;cursor:pointer;margin-bottom:4px}
 .recent-item:hover{background:var(--bg3)}
 .recent-art{width:40px;height:40px;border-radius:7px;background:var(--bg4);overflow:hidden;flex-shrink:0}
 .recent-art img{width:100%;height:100%;object-fit:cover}
 .recent-info{flex:1;min-width:0}
 .recent-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.recent-artist{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.recent-artist{font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 .recent-time{font-family:var(--mono);font-size:10px;color:var(--text3);flex-shrink:0}
-
-/* ─── Profile ─── */
 .profile-header{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,var(--bg3),var(--bg4));border:1px solid var(--border2);border-radius:var(--radius);padding:22px;margin-bottom:22px}
 .profile-avatar{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:28px;font-weight:800;color:#000;flex-shrink:0;overflow:hidden;background:linear-gradient(135deg,var(--green),#0ea85a)}
 .profile-avatar img{width:100%;height:100%;object-fit:cover}
@@ -260,11 +176,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .stat-label{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px}
 .stat-value{font-family:var(--display);font-size:26px;font-weight:800}
 .stat-sub{font-size:11px;color:var(--text3);margin-top:3px}
-
-/* ─── Layout helpers ─── */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .mt-20{margin-top:20px}
-.mt-28{margin-top:28px}
 .page{display:none}.page.active{display:block}
 .loading{display:flex;align-items:center;justify-content:center;padding:48px;color:var(--text3);font-family:var(--mono);font-size:12px;letter-spacing:.5px}
 .loading::before{content:'';width:18px;height:18px;border-radius:50%;border:2px solid var(--border2);border-top-color:var(--green);animation:spin .7s linear infinite;margin-right:12px}
@@ -276,7 +189,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 </head>
 <body>
 
-<!-- ─── Login ─── -->
 <div id="login-screen">
   <div style="text-align:center">
     <div class="logo-mark">
@@ -291,7 +203,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
   </button>
 </div>
 
-<!-- ─── App ─── -->
 <div class="app" id="app" style="display:none">
   <div class="sidebar">
     <div class="sidebar-logo">
@@ -312,12 +223,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
         My Profile
       </div>
     </nav>
-
     <div class="sidebar-section">Friends Listening</div>
     <div id="sidebar-friends" style="overflow-y:auto;flex:1">
       <div style="padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--text3)">loading…</div>
     </div>
-
     <div class="now-playing-mini" id="mini-player" style="display:none">
       <div class="npm-inner">
         <div class="npm-art"><img id="mini-img" src="" alt=""/></div>
@@ -335,7 +244,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
   <div class="main">
     <div class="topbar">
       <div class="page-title" id="page-title">Feed</div>
-      <div class="user-chip" id="user-chip" onclick="showPage('profile', document.querySelector('[data-page=profile]'))">
+      <div class="user-chip" onclick="showPage('profile',document.querySelectorAll('.nav-item')[2])">
         <div class="chip-avatar" id="chip-avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
         <span class="chip-name" id="chip-name">Loading…</span>
       </div>
@@ -346,11 +255,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
     </div>
 
     <div class="content">
-
-      <!-- ─── Feed Page ─── -->
+      <!-- Feed -->
       <div class="page active" id="page-feed">
-        <!-- Your card at top -->
-        <div id="my-feed-card" class="feed-header-card" onclick="showPage('profile', document.querySelector('.nav-item:last-child'))">
+        <div class="feed-header-card" onclick="showPage('profile',document.querySelectorAll('.nav-item')[2])">
           <div class="feed-user-avatar" id="feed-my-avatar">?</div>
           <div class="feed-user-info">
             <div class="feed-user-name" id="feed-my-name">You</div>
@@ -362,8 +269,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
             <div class="feed-np-artist" id="feed-my-artist">—</div>
           </div>
         </div>
-
-        <!-- Full now-playing card -->
         <div id="np-card" style="display:none" class="now-playing-card">
           <div style="font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:1px;margin-bottom:12px;text-transform:uppercase">Now Playing</div>
           <div class="np-row">
@@ -383,29 +288,23 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
             <div class="progress-times"><span id="np-elapsed">0:00</span><span id="np-total">0:00</span></div>
           </div>
         </div>
-
         <div class="section-title mt-20">Friends Activity</div>
         <div id="friends-feed"><div class="loading">Loading friends…</div></div>
       </div>
 
-      <!-- ─── Following Page ─── -->
+      <!-- Following -->
       <div class="page" id="page-following">
         <div class="section-title">People You Follow</div>
         <div id="following-list" style="margin-bottom:24px"><div class="loading">Loading…</div></div>
-
         <div class="section-title">Discover People</div>
         <div id="discover-list" class="discover-grid"><div class="loading" style="grid-column:1/-1">Loading…</div></div>
       </div>
 
-      <!-- ─── My Profile Page ─── -->
+      <!-- My Profile -->
       <div class="page" id="page-profile">
-        <div class="profile-header" id="profile-header">
-          <div class="loading">Loading profile…</div>
-        </div>
+        <div class="profile-header" id="profile-header"><div class="loading">Loading profile…</div></div>
         <div class="stats-row" id="profile-stats"></div>
-
-        <!-- Now playing in profile -->
-        <div id="profile-np-card" style="display:none" class="now-playing-card" >
+        <div id="profile-np-card" style="display:none" class="now-playing-card">
           <div style="font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:1px;margin-bottom:12px;text-transform:uppercase">Now Playing</div>
           <div class="np-row">
             <div class="np-art"><img id="pnp-img" src="" alt=""/></div>
@@ -420,10 +319,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
             </div>
           </div>
         </div>
-
         <div class="divider"></div>
-
-        <!-- Top Charts in profile -->
         <div class="section-tab-row">
           <button class="tab-btn active" onclick="loadTop('short_term',this)">Last 4 Weeks</button>
           <button class="tab-btn" onclick="loadTop('medium_term',this)">6 Months</button>
@@ -439,418 +335,227 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
             <div id="top-artists-grid" class="artists-grid"></div>
           </div>
         </div>
-
         <div class="divider"></div>
-
-        <!-- Recent history in profile -->
         <div class="section-title mt-20">Recent History</div>
         <div id="profile-recent"><div class="loading">Loading…</div></div>
       </div>
-
-    </div><!-- /content -->
-  </div><!-- /main -->
-</div><!-- /app -->
+    </div>
+  </div>
+</div>
 
 <script>
-// ─── Config ─────────────────────────────────────────────────────────────────
-// Change this to your Railway backend URL for production:
-// const API = 'https://your-app.up.railway.app/api';
-const API = '/api';
+// ─── PRODUCTION CONFIG ────────────────────────────────────────────────────────
+const API = 'https://finalshare-production.up.railway.app/api';
 
 let progressInterval = null;
 let _topRange = 'short_term';
 let _followingIds = new Set();
 
-// ─── Auth ─────────────────────────────────────────────────────────────────────
 function loginWithSpotify() { window.location.href = `${API}/auth/spotify`; }
 async function logout() {
   await fetch(`${API}/auth/logout`, { credentials: 'include' });
   location.reload();
 }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
 async function init() {
   const params = new URLSearchParams(location.search);
-  if (params.get('error')) { alert('Spotify auth failed: ' + params.get('error')); history.replaceState({}, '', '/'); }
-
-  const res = await fetch(`${API}/status`, { credentials: 'include' });
-  const status = await res.json();
-
-  if (!status.loggedIn) {
-    document.getElementById('login-screen').style.display = 'flex';
-    document.getElementById('app').style.display = 'none';
-    return;
-  }
-  if (params.get('loggedIn')) history.replaceState({}, '', '/');
-
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-
-  loadUser();
-  loadNowPlaying();
-  loadSidebarFriends();
-  loadFriendsFeed();
-
-  setInterval(loadNowPlaying, 30000);
-  setInterval(loadSidebarFriends, 60000);
+  if (params.get('error')) { alert('Auth failed: ' + params.get('error')); history.replaceState({}, '', '/'); }
+  try {
+    const res = await fetch(`${API}/status`, { credentials: 'include' });
+    const status = await res.json();
+    if (!status.loggedIn) { document.getElementById('login-screen').style.display='flex'; document.getElementById('app').style.display='none'; return; }
+    if (params.get('loggedIn')) history.replaceState({}, '', '/');
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    loadUser(); loadNowPlaying(); loadSidebarFriends(); loadFriendsFeed();
+    setInterval(loadNowPlaying, 30000);
+    setInterval(loadSidebarFriends, 60000);
+  } catch(e) { document.getElementById('login-screen').style.display='flex'; document.getElementById('app').style.display='none'; }
 }
 
-// ─── User ─────────────────────────────────────────────────────────────────────
 async function loadUser() {
   const res = await fetch(`${API}/me`, { credentials: 'include' });
   const user = await res.json();
   if (user.error) return;
   window._user = user;
-
   document.getElementById('chip-name').textContent = user.name || 'You';
   document.getElementById('feed-my-name').textContent = user.name || 'You';
-
   if (user.image) {
     document.getElementById('chip-avatar').innerHTML = `<img src="${user.image}" alt=""/>`;
     document.getElementById('feed-my-avatar').innerHTML = `<img src="${user.image}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt=""/>`;
   } else {
-    const initials = (user.name || 'Y')[0].toUpperCase();
-    document.getElementById('feed-my-avatar').textContent = initials;
+    document.getElementById('feed-my-avatar').textContent = (user.name || 'Y')[0].toUpperCase();
   }
 }
 
-// ─── Now Playing ─────────────────────────────────────────────────────────────
 async function loadNowPlaying() {
   try {
     const res = await fetch(`${API}/now-playing`, { credentials: 'include' });
     const data = await res.json();
-
     if (data.playing && data.track) {
       const t = data.track;
-      // Feed card
-      document.getElementById('feed-my-np').style.display = 'block';
-      document.getElementById('feed-my-track').textContent = t.name;
-      document.getElementById('feed-my-artist').textContent = t.artist;
-      document.getElementById('feed-my-sub').textContent = '🎵 Currently listening';
-
-      // Full card on feed
-      document.getElementById('np-card').style.display = 'block';
-      document.getElementById('np-img').src = t.image || '';
-      document.getElementById('np-track').textContent = t.name;
-      document.getElementById('np-artist').textContent = t.artist;
-      document.getElementById('np-link').href = t.url || '#';
-      document.getElementById('np-total').textContent = fmtMs(t.duration_ms);
-      updateProgress(t.progress_ms, t.duration_ms);
-
+      document.getElementById('feed-my-np').style.display='block';
+      document.getElementById('feed-my-track').textContent=t.name;
+      document.getElementById('feed-my-artist').textContent=t.artist;
+      document.getElementById('feed-my-sub').textContent='🎵 Currently listening';
+      document.getElementById('np-card').style.display='block';
+      document.getElementById('np-img').src=t.image||'';
+      document.getElementById('np-track').textContent=t.name;
+      document.getElementById('np-artist').textContent=t.artist;
+      document.getElementById('np-link').href=t.url||'#';
+      document.getElementById('np-total').textContent=fmtMs(t.duration_ms);
+      updateProgress(t.progress_ms,t.duration_ms);
       clearInterval(progressInterval);
-      if (data.playing) {
-        let elapsed = t.progress_ms;
-        progressInterval = setInterval(() => {
-          elapsed += 1000;
-          if (elapsed >= t.duration_ms) { clearInterval(progressInterval); return; }
-          updateProgress(elapsed, t.duration_ms);
-        }, 1000);
-      }
-
-      // Profile card mirror
-      document.getElementById('profile-np-card').style.display = 'block';
-      document.getElementById('pnp-img').src = t.image || '';
-      document.getElementById('pnp-track').textContent = t.name;
-      document.getElementById('pnp-artist').textContent = t.artist;
-      document.getElementById('pnp-link').href = t.url || '#';
-
-      // Mini player
-      document.getElementById('mini-player').style.display = 'block';
-      document.getElementById('mini-img').src = t.image || '';
-      document.getElementById('mini-track').textContent = t.name;
-      document.getElementById('mini-artist').textContent = t.artist;
-      document.getElementById('mini-wave').classList.toggle('paused', !data.playing);
+      let elapsed=t.progress_ms;
+      progressInterval=setInterval(()=>{ elapsed+=1000; if(elapsed>=t.duration_ms){clearInterval(progressInterval);return;} updateProgress(elapsed,t.duration_ms); },1000);
+      document.getElementById('profile-np-card').style.display='block';
+      document.getElementById('pnp-img').src=t.image||'';
+      document.getElementById('pnp-track').textContent=t.name;
+      document.getElementById('pnp-artist').textContent=t.artist;
+      document.getElementById('pnp-link').href=t.url||'#';
+      document.getElementById('mini-player').style.display='block';
+      document.getElementById('mini-img').src=t.image||'';
+      document.getElementById('mini-track').textContent=t.name;
+      document.getElementById('mini-artist').textContent=t.artist;
+      document.getElementById('mini-wave').classList.toggle('paused',!data.playing);
     } else {
-      document.getElementById('np-card').style.display = 'none';
-      document.getElementById('feed-my-np').style.display = 'none';
-      document.getElementById('feed-my-sub').textContent = 'Not listening to anything right now';
-      document.getElementById('profile-np-card').style.display = 'none';
-      document.getElementById('mini-player').style.display = 'none';
+      ['np-card','profile-np-card'].forEach(id=>document.getElementById(id).style.display='none');
+      document.getElementById('feed-my-np').style.display='none';
+      document.getElementById('feed-my-sub').textContent='Not listening to anything right now';
+      document.getElementById('mini-player').style.display='none';
       clearInterval(progressInterval);
     }
-  } catch(e) { console.warn('now-playing failed', e); }
+  } catch(e) { console.warn('now-playing failed',e); }
 }
 
-function updateProgress(elapsed, total) {
-  const pct = Math.min(100, (elapsed / total) * 100);
-  document.getElementById('np-progress').style.width = pct + '%';
-  document.getElementById('np-elapsed').textContent = fmtMs(elapsed);
+function updateProgress(elapsed,total) {
+  const pct=Math.min(100,(elapsed/total)*100);
+  document.getElementById('np-progress').style.width=pct+'%';
+  document.getElementById('np-elapsed').textContent=fmtMs(elapsed);
 }
 
-// ─── Friends Feed ─────────────────────────────────────────────────────────────
 async function loadFriendsFeed() {
-  const el = document.getElementById('friends-feed');
+  const el=document.getElementById('friends-feed');
   try {
-    const res = await fetch(`${API}/social/friends`, { credentials: 'include' });
-    const { friends } = await res.json();
-
-    if (!friends.length) {
-      el.innerHTML = `<div class="empty"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".3"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><p style="margin-top:10px">Follow people to see their activity</p><p style="font-size:11px;margin-top:4px;color:var(--text3)">Go to <b>Following</b> to find people</p></div>`;
-      return;
-    }
-
-    el.innerHTML = friends.map(f => {
-      const initials = (f.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-      const colors = ['#1fdf64','#38bdf8','#f472b6','#fb923c','#a78bfa','#34d399'];
-      const color = colors[Math.abs((f.name || '').length) % colors.length];
-      const avatarHtml = f.image
-        ? `<img src="${f.image}" alt=""/>`
-        : `<span style="color:${color}">${initials}</span>`;
-
-      if (f.nowPlaying) {
-        const np = f.nowPlaying;
-        return `
-          <div class="friend-activity-card" onclick="window.open('${np.url}','_blank')">
-            <div class="fac-avatar" style="background:${color}20">
-              ${avatarHtml}
-              <div class="fac-playing-dot"></div>
-            </div>
-            <div class="fac-info">
-              <div class="fac-name">${esc(f.name)}</div>
-              <div class="fac-track-row">
-                ${np.image ? `<div class="fac-art"><img src="${np.image}" alt=""/></div>` : ''}
-                <div class="fac-track-info">
-                  <div class="fac-track">${esc(np.name)}</div>
-                  <div class="fac-artist">${esc(np.artist)}</div>
-                </div>
-                <div class="fac-mini-wave">
-                  <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-                </div>
-              </div>
-            </div>
-          </div>`;
-      } else {
-        return `
-          <div class="friend-activity-card" style="opacity:.6;cursor:default">
-            <div class="fac-avatar" style="background:${color}20">${avatarHtml}</div>
-            <div class="fac-info">
-              <div class="fac-name">${esc(f.name)}</div>
-              <div class="fac-idle">Not listening right now</div>
-            </div>
-          </div>`;
-      }
+    const res=await fetch(`${API}/social/friends`,{credentials:'include'});
+    const {friends}=await res.json();
+    if(!friends.length){ el.innerHTML=`<div class="empty"><p>Follow people to see their activity</p><p style="font-size:11px;margin-top:4px;color:var(--text3)">Go to <b>Following</b> to find people</p></div>`; return; }
+    const colors=['#1fdf64','#38bdf8','#f472b6','#fb923c','#a78bfa','#34d399'];
+    el.innerHTML=friends.map(f=>{
+      const initials=(f.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      const color=colors[Math.abs((f.name||'').length)%colors.length];
+      const av=f.image?`<img src="${f.image}" alt=""/>`:`<span style="color:${color}">${initials}</span>`;
+      if(f.nowPlaying){const np=f.nowPlaying;return`<div class="friend-activity-card" onclick="window.open('${np.url}','_blank')"><div class="fac-avatar" style="background:${color}20">${av}<div class="fac-playing-dot"></div></div><div class="fac-info"><div class="fac-name">${esc(f.name)}</div><div class="fac-track-row">${np.image?`<div class="fac-art"><img src="${np.image}" alt=""/></div>`:''}<div class="fac-track-info"><div class="fac-track">${esc(np.name)}</div><div class="fac-artist">${esc(np.artist)}</div></div><div class="fac-mini-wave"><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div></div></div></div></div>`;}
+      return`<div class="friend-activity-card" style="opacity:.6;cursor:default"><div class="fac-avatar" style="background:${color}20">${av}</div><div class="fac-info"><div class="fac-name">${esc(f.name)}</div><div class="fac-idle">Not listening right now</div></div></div>`;
     }).join('');
-  } catch(e) {
-    el.innerHTML = '<div class="empty"><p>Could not load friends activity</p></div>';
-  }
+  } catch(e){ el.innerHTML='<div class="empty"><p>Could not load friends activity</p></div>'; }
 }
 
-// ─── Sidebar Friends ──────────────────────────────────────────────────────────
 async function loadSidebarFriends() {
-  const el = document.getElementById('sidebar-friends');
+  const el=document.getElementById('sidebar-friends');
   try {
-    const res = await fetch(`${API}/social/friends`, { credentials: 'include' });
-    const { friends } = await res.json();
-
-    if (!friends.length) {
-      el.innerHTML = `<div style="padding:10px 14px;font-size:11px;color:var(--text3)">No friends yet</div>`;
-      return;
-    }
-
-    el.innerHTML = friends.map(f => {
-      const initials = (f.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-      const colors = ['#1fdf64','#38bdf8','#f472b6','#fb923c','#a78bfa','#34d399'];
-      const color = colors[Math.abs((f.name || '').length) % colors.length];
-      const isPlaying = !!f.nowPlaying;
-      return `
-        <div class="friend-item">
-          <div class="status-ring ${isPlaying ? 'playing' : 'offline'}">
-            <div class="avatar av-sm" style="background:${color}20;color:${color}">
-              ${f.image ? `<img src="${f.image}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt=""/>` : initials}
-            </div>
-          </div>
-          <div class="friend-info">
-            <div class="friend-name">${esc(f.name)}</div>
-            <div class="friend-song">${isPlaying ? `🎵 ${esc(f.nowPlaying.name)}` : 'Not listening'}</div>
-          </div>
-        </div>`;
+    const res=await fetch(`${API}/social/friends`,{credentials:'include'});
+    const {friends}=await res.json();
+    if(!friends.length){el.innerHTML=`<div style="padding:10px 14px;font-size:11px;color:var(--text3)">No friends yet</div>`;return;}
+    const colors=['#1fdf64','#38bdf8','#f472b6','#fb923c','#a78bfa','#34d399'];
+    el.innerHTML=friends.map(f=>{
+      const initials=(f.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      const color=colors[Math.abs((f.name||'').length)%colors.length];
+      const isPlaying=!!f.nowPlaying;
+      return`<div class="friend-item"><div class="status-ring ${isPlaying?'playing':'offline'}"><div class="avatar av-sm" style="background:${color}20;color:${color}">${f.image?`<img src="${f.image}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt=""/>`:initials}</div></div><div class="friend-info"><div class="friend-name">${esc(f.name)}</div><div class="friend-song">${isPlaying?`🎵 ${esc(f.nowPlaying.name)}`:'Not listening'}</div></div></div>`;
     }).join('');
-  } catch(e) { /* silent fail */ }
+  } catch(e){}
 }
 
-// ─── Following Page ───────────────────────────────────────────────────────────
 async function loadFollowingPage() {
-  const followEl = document.getElementById('following-list');
-  const discoverEl = document.getElementById('discover-list');
-
+  const followEl=document.getElementById('following-list');
+  const discoverEl=document.getElementById('discover-list');
   try {
-    const [friendsRes, usersRes, idsRes] = await Promise.all([
-      fetch(`${API}/social/friends`, { credentials: 'include' }),
-      fetch(`${API}/social/users`, { credentials: 'include' }),
-      fetch(`${API}/social/following-ids`, { credentials: 'include' })
+    const [fRes,uRes,iRes]=await Promise.all([
+      fetch(`${API}/social/friends`,{credentials:'include'}),
+      fetch(`${API}/social/users`,{credentials:'include'}),
+      fetch(`${API}/social/following-ids`,{credentials:'include'})
     ]);
-    const { friends } = await friendsRes.json();
-    const { users } = await usersRes.json();
-    const { following } = await idsRes.json();
-    _followingIds = new Set(following);
-
-    // Followed people
-    if (!friends.length) {
-      followEl.innerHTML = `<div class="empty" style="padding:20px"><p>You haven't followed anyone yet</p></div>`;
-    } else {
-      followEl.innerHTML = `<div class="discover-grid">${friends.map(f => userCard(f, true)).join('')}</div>`;
-    }
-
-    // Discover (not yet following)
-    const notFollowing = users.filter(u => !_followingIds.has(u.id));
-    if (!notFollowing.length) {
-      discoverEl.innerHTML = `<div style="color:var(--text3);font-size:12px;padding:10px 0">No new people to discover yet. Share your link to invite friends!</div>`;
-    } else {
-      discoverEl.innerHTML = notFollowing.map(u => userCard(u, false)).join('');
-    }
-  } catch(e) {
-    followEl.innerHTML = '<div class="empty"><p>Could not load</p></div>';
-  }
+    const {friends}=await fRes.json();
+    const {users}=await uRes.json();
+    const {following}=await iRes.json();
+    _followingIds=new Set(following);
+    followEl.innerHTML=!friends.length?`<div class="empty" style="padding:20px"><p>You haven't followed anyone yet</p></div>`:`<div class="discover-grid">${friends.map(f=>userCard(f,true)).join('')}</div>`;
+    const notFollowing=users.filter(u=>!_followingIds.has(u.id));
+    discoverEl.innerHTML=!notFollowing.length?`<div style="color:var(--text3);font-size:12px;padding:10px 0">No new people to discover yet!</div>`:notFollowing.map(u=>userCard(u,false)).join('');
+  } catch(e){ followEl.innerHTML='<div class="empty"><p>Could not load</p></div>'; }
 }
 
-function userCard(u, isFollowing) {
-  const initials = (u.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-  const colors = ['#1fdf64','#38bdf8','#f472b6','#fb923c','#a78bfa','#34d399'];
-  const color = colors[Math.abs((u.name || '').length) % colors.length];
-  const npText = u.nowPlaying ? `🎵 ${esc(u.nowPlaying.name)}` : 'Not listening';
-  return `
-    <div class="discover-card">
-      <div class="dc-avatar" style="background:${color}20;color:${color}">
-        ${u.image ? `<img src="${u.image}" alt=""/>` : initials}
-      </div>
-      <div class="dc-info">
-        <div class="dc-name">${esc(u.name)}</div>
-        <div class="dc-sub">${isFollowing && u.nowPlaying ? npText : 'Waveshare user'}</div>
-      </div>
-      <button class="follow-btn ${isFollowing ? 'following' : ''}" onclick="toggleFollow('${u.id}', this)">
-        ${isFollowing ? 'Following' : '+ Follow'}
-      </button>
-    </div>`;
+function userCard(u,isFollowing) {
+  const initials=(u.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const colors=['#1fdf64','#38bdf8','#f472b6','#fb923c','#a78bfa','#34d399'];
+  const color=colors[Math.abs((u.name||'').length)%colors.length];
+  return`<div class="discover-card"><div class="dc-avatar" style="background:${color}20;color:${color}">${u.image?`<img src="${u.image}" alt=""/>`:initials}</div><div class="dc-info"><div class="dc-name">${esc(u.name)}</div><div class="dc-sub">Waveshare user</div></div><button class="follow-btn ${isFollowing?'following':''}" onclick="toggleFollow('${u.id}',this)">${isFollowing?'Following':'+ Follow'}</button></div>`;
 }
 
-async function toggleFollow(userId, btn) {
-  const isFollowing = btn.classList.contains('following');
-  const method = isFollowing ? 'DELETE' : 'POST';
+async function toggleFollow(userId,btn) {
+  const isFollowing=btn.classList.contains('following');
   try {
-    await fetch(`${API}/social/follow/${userId}`, { method, credentials: 'include' });
-    if (isFollowing) {
-      _followingIds.delete(userId);
-      btn.classList.remove('following');
-      btn.textContent = '+ Follow';
-    } else {
-      _followingIds.add(userId);
-      btn.classList.add('following');
-      btn.textContent = 'Following';
-    }
+    await fetch(`${API}/social/follow/${userId}`,{method:isFollowing?'DELETE':'POST',credentials:'include'});
+    if(isFollowing){_followingIds.delete(userId);btn.classList.remove('following');btn.textContent='+ Follow';}
+    else{_followingIds.add(userId);btn.classList.add('following');btn.textContent='Following';}
     loadSidebarFriends();
-    if (document.getElementById('page-feed').classList.contains('active')) loadFriendsFeed();
-  } catch(e) { console.warn('follow error', e); }
+    if(document.getElementById('page-feed').classList.contains('active'))loadFriendsFeed();
+  } catch(e){}
 }
 
-// ─── Top Charts ───────────────────────────────────────────────────────────────
-async function loadTop(range, btn) {
-  _topRange = range;
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-
-  const tEl = document.getElementById('top-tracks-list');
-  const aEl = document.getElementById('top-artists-grid');
-  tEl.innerHTML = '<div class="loading">Loading…</div>';
-  aEl.innerHTML = '';
-
+async function loadTop(range,btn) {
+  _topRange=range;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const tEl=document.getElementById('top-tracks-list');
+  const aEl=document.getElementById('top-artists-grid');
+  tEl.innerHTML='<div class="loading">Loading…</div>'; aEl.innerHTML='';
   try {
-    const [tRes, aRes] = await Promise.all([
-      fetch(`${API}/top-tracks?range=${range}`, { credentials: 'include' }),
-      fetch(`${API}/top-artists?range=${range}`, { credentials: 'include' })
-    ]);
-    const { tracks } = await tRes.json();
-    const { artists } = await aRes.json();
-
-    tEl.innerHTML = `<div class="track-list">${tracks.map(t => `
-      <div class="track-item" onclick="window.open('${t.url}','_blank')">
-        <div class="track-rank">${t.rank}</div>
-        <div class="track-art">${t.image ? `<img src="${t.image}" alt=""/>` : ''}</div>
-        <div class="track-info"><div class="track-name">${esc(t.name)}</div><div class="track-artist">${esc(t.artist)}</div></div>
-        <div class="track-pop"><div class="track-pop-fill" style="width:${t.popularity}%"></div></div>
-      </div>`).join('')}</div>`;
-
-    aEl.innerHTML = artists.map(a => {
-      const initials = a.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-      return `<div class="artist-card" onclick="window.open('${a.url}','_blank')">
-        <div class="artist-img">${a.image ? `<img src="${a.image}" alt=""/>` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:22px;font-weight:800;color:var(--text3)">${initials}</div>`}</div>
-        <div class="artist-name">${esc(a.name)}</div>
-        <div class="artist-genre">${a.genres.join(' · ') || 'Artist'}</div>
-      </div>`;
-    }).join('');
-  } catch(e) { tEl.innerHTML = '<div class="empty"><p>Could not load</p></div>'; }
+    const [tRes,aRes]=await Promise.all([fetch(`${API}/top-tracks?range=${range}`,{credentials:'include'}),fetch(`${API}/top-artists?range=${range}`,{credentials:'include'})]);
+    const {tracks}=await tRes.json(); const {artists}=await aRes.json();
+    tEl.innerHTML=`<div class="track-list">${tracks.map(t=>`<div class="track-item" onclick="window.open('${t.url}','_blank')"><div class="track-rank">${t.rank}</div><div class="track-art">${t.image?`<img src="${t.image}" alt=""/>`:''}</div><div class="track-info"><div class="track-name">${esc(t.name)}</div><div class="track-artist">${esc(t.artist)}</div></div><div class="track-pop"><div class="track-pop-fill" style="width:${t.popularity}%"></div></div></div>`).join('')}</div>`;
+    aEl.innerHTML=artists.map(a=>{const i=a.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();return`<div class="artist-card" onclick="window.open('${a.url}','_blank')"><div class="artist-img">${a.image?`<img src="${a.image}" alt=""/>`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:22px;font-weight:800;color:var(--text3)">${i}</div>`}</div><div class="artist-name">${esc(a.name)}</div><div class="artist-genre">${a.genres.join(' · ')||'Artist'}</div></div>`;}).join('');
+  } catch(e){tEl.innerHTML='<div class="empty"><p>Could not load</p></div>';}
 }
 
-// ─── Profile Page ─────────────────────────────────────────────────────────────
 async function loadProfilePage() {
-  const header = document.getElementById('profile-header');
-  const stats = document.getElementById('profile-stats');
-
+  const header=document.getElementById('profile-header');
+  const stats=document.getElementById('profile-stats');
   try {
-    const meRes = await fetch(`${API}/me`, { credentials: 'include' });
-    const me = await meRes.json();
-
-    header.innerHTML = `
-      <div class="profile-avatar">${me.image ? `<img src="${me.image}" alt="${esc(me.name)}"/>` : (me.name || '?')[0].toUpperCase()}</div>
-      <div>
-        <div class="profile-name">${esc(me.name || 'Spotify User')}</div>
-        <div class="profile-handle">@${esc(me.id || '')}</div>
-        <a href="https://open.spotify.com/user/${esc(me.id||'')}" target="_blank" class="open-spotify" style="margin-top:10px;display:inline-flex">Open on Spotify ↗</a>
-      </div>`;
-
-    stats.innerHTML = `
-      <div class="stat-card"><div class="stat-label">Followers</div><div class="stat-value">${(me.followers||0).toLocaleString()}</div><div class="stat-sub">on Spotify</div></div>
-      <div class="stat-card"><div class="stat-label">Country</div><div class="stat-value" style="font-size:20px">${me.country || '—'}</div><div class="stat-sub">account region</div></div>
-      <div class="stat-card"><div class="stat-label">Friends</div><div class="stat-value">${_followingIds.size}</div><div class="stat-sub">on Waveshare</div></div>`;
-  } catch(e) { header.innerHTML = '<div class="empty"><p>Could not load profile</p></div>'; }
-
-  loadTop('short_term', document.querySelector('.tab-btn'));
+    const me=await (await fetch(`${API}/me`,{credentials:'include'})).json();
+    header.innerHTML=`<div class="profile-avatar">${me.image?`<img src="${me.image}" alt="${esc(me.name)}">`:(me.name||'?')[0].toUpperCase()}</div><div><div class="profile-name">${esc(me.name||'Spotify User')}</div><div class="profile-handle">@${esc(me.id||'')}</div><a href="https://open.spotify.com/user/${esc(me.id||'')}" target="_blank" class="open-spotify" style="margin-top:10px;display:inline-flex">Open on Spotify ↗</a></div>`;
+    stats.innerHTML=`<div class="stat-card"><div class="stat-label">Followers</div><div class="stat-value">${(me.followers||0).toLocaleString()}</div><div class="stat-sub">on Spotify</div></div><div class="stat-card"><div class="stat-label">Country</div><div class="stat-value" style="font-size:20px">${me.country||'—'}</div><div class="stat-sub">account region</div></div><div class="stat-card"><div class="stat-label">Friends</div><div class="stat-value">${_followingIds.size}</div><div class="stat-sub">on Waveshare</div></div>`;
+  } catch(e){header.innerHTML='<div class="empty"><p>Could not load profile</p></div>';}
+  loadTop('short_term',document.querySelector('.tab-btn'));
   loadProfileRecent();
 }
 
 async function loadProfileRecent() {
-  const el = document.getElementById('profile-recent');
+  const el=document.getElementById('profile-recent');
   try {
-    const res = await fetch(`${API}/recent`, { credentials: 'include' });
-    const { tracks } = await res.json();
-    if (!tracks?.length) { el.innerHTML = '<div class="empty"><p>No recent tracks</p></div>'; return; }
-    el.innerHTML = tracks.map(t => `
-      <div class="recent-item" onclick="window.open('${t.url}','_blank')">
-        <div class="recent-art">${t.image ? `<img src="${t.image}" alt=""/>` : ''}</div>
-        <div class="recent-info"><div class="recent-name">${esc(t.name)}</div><div class="recent-artist">${esc(t.artist)}</div></div>
-        <div class="recent-time">${relTime(t.played_at)}</div>
-      </div>`).join('');
-  } catch(e) { el.innerHTML = '<div class="empty"><p>Could not load history</p></div>'; }
+    const {tracks}=await (await fetch(`${API}/recent`,{credentials:'include'})).json();
+    if(!tracks?.length){el.innerHTML='<div class="empty"><p>No recent tracks</p></div>';return;}
+    el.innerHTML=tracks.map(t=>`<div class="recent-item" onclick="window.open('${t.url}','_blank')"><div class="recent-art">${t.image?`<img src="${t.image}" alt=""/>`:''}</div><div class="recent-info"><div class="recent-name">${esc(t.name)}</div><div class="recent-artist">${esc(t.artist)}</div></div><div class="recent-time">${relTime(t.played_at)}</div></div>`).join('');
+  } catch(e){el.innerHTML='<div class="empty"><p>Could not load history</p></div>';}
 }
 
-// ─── Page Routing ─────────────────────────────────────────────────────────────
-const pageTitles = { feed: 'Feed', following: 'Following', profile: 'My Profile' };
-const pageLoaders = { following: loadFollowingPage, profile: loadProfilePage };
-const loaded = new Set(['feed']);
-
-function showPage(name, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + name)?.classList.add('active');
-  if (el) el.classList.add('active');
-  document.getElementById('page-title').textContent = pageTitles[name] || name;
-
-  if (!loaded.has(name) && pageLoaders[name]) {
-    loaded.add(name);
-    pageLoaders[name]();
-  }
+const pageTitles={feed:'Feed',following:'Following',profile:'My Profile'};
+const pageLoaders={following:loadFollowingPage,profile:loadProfilePage};
+const loaded=new Set(['feed']);
+function showPage(name,el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name)?.classList.add('active');
+  if(el)el.classList.add('active');
+  document.getElementById('page-title').textContent=pageTitles[name]||name;
+  if(!loaded.has(name)&&pageLoaders[name]){loaded.add(name);pageLoaders[name]();}
 }
 
-// ─── Utilities ────────────────────────────────────────────────────────────────
-function fmtMs(ms) { const s = Math.floor(ms/1000); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
-function relTime(iso) {
-  const m = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
-  if (m < 1) return 'just now'; if (m < 60) return `${m}m ago`;
-  const h = Math.floor(m/60); if (h < 24) return `${h}h ago`;
-  return `${Math.floor(h/24)}d ago`;
-}
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtMs(ms){const s=Math.floor(ms/1000);return`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;}
+function relTime(iso){const m=Math.floor((Date.now()-new Date(iso).getTime())/60000);if(m<1)return'just now';if(m<60)return`${m}m ago`;const h=Math.floor(m/60);if(h<24)return`${h}h ago`;return`${Math.floor(h/24)}d ago`;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// ─── Boot ─────────────────────────────────────────────────────────────────────
 init();
 </script>
 </body>

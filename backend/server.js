@@ -7,13 +7,13 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
+app.set('trust proxy', 1); // ← Critical for Railway (behind proxy)
+
 const PORT = process.env.PORT || 4000;
-const FRONTEND_URL = process.env.FRONTEND_URL || `http://127.0.0.1:${PORT}`;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5500';
 
 // ─── In-memory state stores ────────────────────────────────────────────────────
 const oauthStates = new Map();
-
-// Social user store: userId → { profile, accessToken, refreshToken, tokenExpiry, following: Set }
 const userStore = new Map();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
@@ -26,7 +26,12 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'waveshare-secret-change-me',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false, httpOnly: true, maxAge: 1000 * 60 * 60 * 24, sameSite: 'lax' }
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24,
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  }
 }));
 
 // ─── Serve frontend static files ──────────────────────────────────────────────
@@ -35,7 +40,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 // ─── Spotify Config ───────────────────────────────────────────────────────────
 const SPOTIFY_CLIENT_ID     = process.env.SPOTIFY_CLIENT_ID;
 const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI          = process.env.REDIRECT_URI || `http://127.0.0.1:${PORT}/api/auth/spotify/callback`;
+const REDIRECT_URI          = process.env.REDIRECT_URI || `http://localhost:4000/api/auth/spotify/callback`;
 
 const SCOPES = [
   'user-read-currently-playing',
@@ -63,14 +68,12 @@ async function refreshAccessToken(refreshToken) {
 }
 
 async function spotifyGet(tokenObj, endpoint) {
-  // tokenObj can be a session or a stored user object — both have same shape
   if (Date.now() > tokenObj.tokenExpiry) {
     const tokens = await refreshAccessToken(tokenObj.refreshToken);
     tokenObj.accessToken = tokens.access_token;
     tokenObj.tokenExpiry = Date.now() + tokens.expires_in * 1000;
     if (tokens.refresh_token) tokenObj.refreshToken = tokens.refresh_token;
 
-    // Also update userStore if this is a stored user
     if (tokenObj.userId && userStore.has(tokenObj.userId)) {
       const stored = userStore.get(tokenObj.userId);
       stored.accessToken = tokenObj.accessToken;
@@ -125,7 +128,6 @@ app.get('/api/auth/spotify/callback', async (req, res) => {
     req.session.userName = profile.display_name;
     req.session.userImg  = profile.images?.[0]?.url || null;
 
-    // Store in social user store (preserve existing follows)
     const existing = userStore.get(profile.id) || {};
     userStore.set(profile.id, {
       userId: profile.id,
@@ -162,7 +164,6 @@ function requireAuth(req, res, next) {
 }
 
 // ─── Core API Routes ──────────────────────────────────────────────────────────
-
 app.get('/api/status', (req, res) => {
   res.json({
     loggedIn: !!req.session.accessToken,
@@ -264,8 +265,6 @@ app.get('/api/top-artists', requireAuth, async (req, res) => {
 });
 
 // ─── Social Routes ────────────────────────────────────────────────────────────
-
-// List all users on the platform (for discovery)
 app.get('/api/social/users', requireAuth, async (req, res) => {
   const myId = req.session.userId;
   const users = [];
@@ -278,12 +277,10 @@ app.get('/api/social/users', requireAuth, async (req, res) => {
       lastSeen: user.lastSeen
     });
   }
-  // Sort by most recently active
   users.sort((a, b) => b.lastSeen - a.lastSeen);
   res.json({ users });
 });
 
-// Get users you follow + their now-playing
 app.get('/api/social/friends', requireAuth, async (req, res) => {
   const myId = req.session.userId;
   const me = userStore.get(myId);
@@ -308,7 +305,7 @@ app.get('/api/social/friends', requireAuth, async (req, res) => {
           duration_ms: np.item.duration_ms
         };
       }
-    } catch (e) { /* token issues or no playback */ }
+    } catch (e) {}
 
     friends.push({
       id: friend.profile.id,
@@ -322,7 +319,6 @@ app.get('/api/social/friends', requireAuth, async (req, res) => {
   res.json({ friends });
 });
 
-// Follow a user
 app.post('/api/social/follow/:userId', requireAuth, (req, res) => {
   const myId = req.session.userId;
   const me = userStore.get(myId);
@@ -333,7 +329,6 @@ app.post('/api/social/follow/:userId', requireAuth, (req, res) => {
   res.json({ success: true, following: [...me.following] });
 });
 
-// Unfollow a user
 app.delete('/api/social/follow/:userId', requireAuth, (req, res) => {
   const myId = req.session.userId;
   const me = userStore.get(myId);
@@ -343,7 +338,6 @@ app.delete('/api/social/follow/:userId', requireAuth, (req, res) => {
   res.json({ success: true, following: [...me.following] });
 });
 
-// Get who I'm following (IDs)
 app.get('/api/social/following-ids', requireAuth, (req, res) => {
   const me = userStore.get(req.session.userId);
   res.json({ following: me ? [...me.following] : [] });
