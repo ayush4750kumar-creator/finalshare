@@ -4,6 +4,10 @@ const axios = require('axios');
 const session = require('express-session');
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'waveshare-jwt-secret';
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'waveshare-jwt-secret';
 const path = require('path');
 require('dotenv').config();
 
@@ -127,7 +131,7 @@ app.get('/api/auth/spotify/callback', async (req, res) => {
     req.session.tokenExpiry  = Date.now() + expires_in * 1000;
 
     const profile = await spotifyGet(req.session, '/me');
-    req.session.userId   = profile.id;
+    req.userId   = profile.id;
     req.session.userName = profile.display_name;
     req.session.userImg  = profile.images?.[0]?.url || null;
 
@@ -148,7 +152,8 @@ app.get('/api/auth/spotify/callback', async (req, res) => {
       lastSeen: Date.now()
     });
 
-    res.redirect(`${FRONTEND_URL}?loggedIn=true`);
+    const token = jwt.sign({ userId: profile.id }, JWT_SECRET, { expiresIn: '7d' });
+    res.redirect(`${FRONTEND_URL}?token=${token}`);
   } catch (err) {
     console.error('OAuth callback error:', err.response?.data || err.message);
     res.redirect(`${FRONTEND_URL}?error=auth_failed`);
@@ -162,15 +167,22 @@ app.get('/api/auth/logout', (req, res) => {
 
 // ─── Auth Guard ────────────────────────────────────────────────────────────────
 function requireAuth(req, res, next) {
-  if (!req.session.accessToken) return res.status(401).json({ error: 'Not authenticated' });
-  next();
+  const auth = req.headers.authorization;
+  if (!auth) return res.status(401).json({ error: 'Not authenticated' });
+  try {
+    const decoded = jwt.verify(auth.replace('Bearer ', ''), JWT_SECRET);
+    req.userId = decoded.userId;
+    next();
+  } catch(e) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
 }
 
 // ─── Core API Routes ──────────────────────────────────────────────────────────
 app.get('/api/status', (req, res) => {
   res.json({
     loggedIn: !!req.session.accessToken,
-    user: req.session.accessToken ? { id: req.session.userId, name: req.session.userName, image: req.session.userImg } : null
+    user: req.session.accessToken ? { id: req.userId, name: req.session.userName, image: req.session.userImg } : null
   });
 });
 
@@ -269,7 +281,7 @@ app.get('/api/top-artists', requireAuth, async (req, res) => {
 
 // ─── Social Routes ────────────────────────────────────────────────────────────
 app.get('/api/social/users', requireAuth, async (req, res) => {
-  const myId = req.session.userId;
+  const myId = req.userId;
   const users = [];
   for (const [id, user] of userStore.entries()) {
     if (id === myId) continue;
@@ -285,7 +297,7 @@ app.get('/api/social/users', requireAuth, async (req, res) => {
 });
 
 app.get('/api/social/friends', requireAuth, async (req, res) => {
-  const myId = req.session.userId;
+  const myId = req.userId;
   const me = userStore.get(myId);
   if (!me) return res.json({ friends: [] });
 
@@ -323,7 +335,7 @@ app.get('/api/social/friends', requireAuth, async (req, res) => {
 });
 
 app.post('/api/social/follow/:userId', requireAuth, (req, res) => {
-  const myId = req.session.userId;
+  const myId = req.userId;
   const me = userStore.get(myId);
   if (!me) return res.status(400).json({ error: 'User not found in store' });
   if (!userStore.has(req.params.userId)) return res.status(404).json({ error: 'Target user not found' });
@@ -333,7 +345,7 @@ app.post('/api/social/follow/:userId', requireAuth, (req, res) => {
 });
 
 app.delete('/api/social/follow/:userId', requireAuth, (req, res) => {
-  const myId = req.session.userId;
+  const myId = req.userId;
   const me = userStore.get(myId);
   if (!me) return res.status(400).json({ error: 'User not found in store' });
 
@@ -342,7 +354,7 @@ app.delete('/api/social/follow/:userId', requireAuth, (req, res) => {
 });
 
 app.get('/api/social/following-ids', requireAuth, (req, res) => {
-  const me = userStore.get(req.session.userId);
+  const me = userStore.get(req.userId);
   res.json({ following: me ? [...me.following] : [] });
 });
 

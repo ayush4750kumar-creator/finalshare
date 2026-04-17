@@ -345,7 +345,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 
 <script>
 // ─── PRODUCTION CONFIG ────────────────────────────────────────────────────────
-const API = 'https://finalshare-production.up.railway.app/api';
+const API = '/api';
+
+const getToken = () => localStorage.getItem('wv_token');
+const authHeaders = () => {
+  const t = getToken();
+  return t ? { 'Authorization': 'Bearer ' + t } : {};
+};
+
 
 let progressInterval = null;
 let _topRange = 'short_term';
@@ -353,7 +360,7 @@ let _followingIds = new Set();
 
 function loginWithSpotify() { window.location.href = `${API}/auth/spotify`; }
 async function logout() {
-  await fetch(`${API}/auth/logout`, { credentials: 'include' });
+  await fetch(`${API}/auth/logout`, { headers: authHeaders() });
   location.reload();
 }
 
@@ -361,10 +368,10 @@ async function init() {
   const params = new URLSearchParams(location.search);
   if (params.get('error')) { alert('Auth failed: ' + params.get('error')); history.replaceState({}, '', '/'); }
   try {
-    const res = await fetch(`${API}/status`, { credentials: 'include' });
+    const res = await fetch(`${API}/status`, { headers: authHeaders() });
     const status = await res.json();
     if (!status.loggedIn) { document.getElementById('login-screen').style.display='flex'; document.getElementById('app').style.display='none'; return; }
-    if (params.get('loggedIn')) history.replaceState({}, '', '/');
+    if (params.get('token')) { localStorage.setItem('wv_token', params.get('token')); history.replaceState({}, '', '/'); }
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app').style.display='flex';
     loadUser(); loadNowPlaying(); loadSidebarFriends(); loadFriendsFeed();
@@ -374,7 +381,7 @@ async function init() {
 }
 
 async function loadUser() {
-  const res = await fetch(`${API}/me`, { credentials: 'include' });
+  const res = await fetch(`${API}/me`, { headers: authHeaders() });
   const user = await res.json();
   if (user.error) return;
   window._user = user;
@@ -390,7 +397,7 @@ async function loadUser() {
 
 async function loadNowPlaying() {
   try {
-    const res = await fetch(`${API}/now-playing`, { credentials: 'include' });
+    const res = await fetch(`${API}/now-playing`, { headers: authHeaders() });
     const data = await res.json();
     if (data.playing && data.track) {
       const t = data.track;
@@ -437,7 +444,7 @@ function updateProgress(elapsed,total) {
 async function loadFriendsFeed() {
   const el=document.getElementById('friends-feed');
   try {
-    const res=await fetch(`${API}/social/friends`,{credentials:'include'});
+    const res=await fetch(`${API}/social/friends`, { headers: authHeaders() });
     const {friends}=await res.json();
     if(!friends.length){ el.innerHTML=`<div class="empty"><p>Follow people to see their activity</p><p style="font-size:11px;margin-top:4px;color:var(--text3)">Go to <b>Following</b> to find people</p></div>`; return; }
     const colors=['#1fdf64','#38bdf8','#f472b6','#fb923c','#a78bfa','#34d399'];
@@ -454,7 +461,7 @@ async function loadFriendsFeed() {
 async function loadSidebarFriends() {
   const el=document.getElementById('sidebar-friends');
   try {
-    const res=await fetch(`${API}/social/friends`,{credentials:'include'});
+    const res=await fetch(`${API}/social/friends`, { headers: authHeaders() });
     const {friends}=await res.json();
     if(!friends.length){el.innerHTML=`<div style="padding:10px 14px;font-size:11px;color:var(--text3)">No friends yet</div>`;return;}
     const colors=['#1fdf64','#38bdf8','#f472b6','#fb923c','#a78bfa','#34d399'];
@@ -472,9 +479,9 @@ async function loadFollowingPage() {
   const discoverEl=document.getElementById('discover-list');
   try {
     const [fRes,uRes,iRes]=await Promise.all([
-      fetch(`${API}/social/friends`,{credentials:'include'}),
-      fetch(`${API}/social/users`,{credentials:'include'}),
-      fetch(`${API}/social/following-ids`,{credentials:'include'})
+      fetch(`${API}/social/friends`, { headers: authHeaders() }),
+      fetch(`${API}/social/users`, { headers: authHeaders() }),
+      fetch(`${API}/social/following-ids`, { headers: authHeaders() })
     ]);
     const {friends}=await fRes.json();
     const {users}=await uRes.json();
@@ -496,7 +503,7 @@ function userCard(u,isFollowing) {
 async function toggleFollow(userId,btn) {
   const isFollowing=btn.classList.contains('following');
   try {
-    await fetch(`${API}/social/follow/${userId}`,{method:isFollowing?'DELETE':'POST',credentials:'include'});
+    await fetch(`${API}/social/follow/${userId}`, { method: isFollowing ? 'DELETE' : 'POST', headers: authHeaders() });
     if(isFollowing){_followingIds.delete(userId);btn.classList.remove('following');btn.textContent='+ Follow';}
     else{_followingIds.add(userId);btn.classList.add('following');btn.textContent='Following';}
     loadSidebarFriends();
@@ -512,7 +519,7 @@ async function loadTop(range,btn) {
   const aEl=document.getElementById('top-artists-grid');
   tEl.innerHTML='<div class="loading">Loading…</div>'; aEl.innerHTML='';
   try {
-    const [tRes,aRes]=await Promise.all([fetch(`${API}/top-tracks?range=${range}`,{credentials:'include'}),fetch(`${API}/top-artists?range=${range}`,{credentials:'include'})]);
+    const [tRes,aRes]=await Promise.all([fetch(`${API}/top-tracks?range=${range}`, { headers: authHeaders() }),fetch(`${API}/top-artists?range=${range}`, { headers: authHeaders() })]);
     const {tracks}=await tRes.json(); const {artists}=await aRes.json();
     tEl.innerHTML=`<div class="track-list">${tracks.map(t=>`<div class="track-item" onclick="window.open('${t.url}','_blank')"><div class="track-rank">${t.rank}</div><div class="track-art">${t.image?`<img src="${t.image}" alt=""/>`:''}</div><div class="track-info"><div class="track-name">${esc(t.name)}</div><div class="track-artist">${esc(t.artist)}</div></div><div class="track-pop"><div class="track-pop-fill" style="width:${t.popularity}%"></div></div></div>`).join('')}</div>`;
     aEl.innerHTML=artists.map(a=>{const i=a.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();return`<div class="artist-card" onclick="window.open('${a.url}','_blank')"><div class="artist-img">${a.image?`<img src="${a.image}" alt=""/>`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:22px;font-weight:800;color:var(--text3)">${i}</div>`}</div><div class="artist-name">${esc(a.name)}</div><div class="artist-genre">${a.genres.join(' · ')||'Artist'}</div></div>`;}).join('');
@@ -523,7 +530,7 @@ async function loadProfilePage() {
   const header=document.getElementById('profile-header');
   const stats=document.getElementById('profile-stats');
   try {
-    const me=await (await fetch(`${API}/me`,{credentials:'include'})).json();
+    const me=await (await fetch(`${API}/me`, { headers: authHeaders() })).json();
     header.innerHTML=`<div class="profile-avatar">${me.image?`<img src="${me.image}" alt="${esc(me.name)}">`:(me.name||'?')[0].toUpperCase()}</div><div><div class="profile-name">${esc(me.name||'Spotify User')}</div><div class="profile-handle">@${esc(me.id||'')}</div><a href="https://open.spotify.com/user/${esc(me.id||'')}" target="_blank" class="open-spotify" style="margin-top:10px;display:inline-flex">Open on Spotify ↗</a></div>`;
     stats.innerHTML=`<div class="stat-card"><div class="stat-label">Followers</div><div class="stat-value">${(me.followers||0).toLocaleString()}</div><div class="stat-sub">on Spotify</div></div><div class="stat-card"><div class="stat-label">Country</div><div class="stat-value" style="font-size:20px">${me.country||'—'}</div><div class="stat-sub">account region</div></div><div class="stat-card"><div class="stat-label">Friends</div><div class="stat-value">${_followingIds.size}</div><div class="stat-sub">on Waveshare</div></div>`;
   } catch(e){header.innerHTML='<div class="empty"><p>Could not load profile</p></div>';}
@@ -534,7 +541,7 @@ async function loadProfilePage() {
 async function loadProfileRecent() {
   const el=document.getElementById('profile-recent');
   try {
-    const {tracks}=await (await fetch(`${API}/recent`,{credentials:'include'})).json();
+    const {tracks}=await (await fetch(`${API}/recent`, { headers: authHeaders() })).json();
     if(!tracks?.length){el.innerHTML='<div class="empty"><p>No recent tracks</p></div>';return;}
     el.innerHTML=tracks.map(t=>`<div class="recent-item" onclick="window.open('${t.url}','_blank')"><div class="recent-art">${t.image?`<img src="${t.image}" alt=""/>`:''}</div><div class="recent-info"><div class="recent-name">${esc(t.name)}</div><div class="recent-artist">${esc(t.artist)}</div></div><div class="recent-time">${relTime(t.played_at)}</div></div>`).join('');
   } catch(e){el.innerHTML='<div class="empty"><p>Could not load history</p></div>';}
