@@ -1,10 +1,10 @@
 {
   "version": 2,
+  "outputDirectory": "frontend",
   "rewrites": [
     {
       "source": "/api/:path*",
       "destination": "https://finalshare-production.up.railway.app/api/:path*"
     }
-  ],
-  "outputDirectory": "frontend"
+  ]
 }
