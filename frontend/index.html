@@ -34,14 +34,43 @@
 }
 body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;overflow:hidden;-webkit-font-smoothing:antialiased}
 
+/* ── LOGIN SCREEN ── */
 #login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:28px;background:#fff;padding:20px}
 .logo-mark{width:64px;height:64px;border-radius:16px;background:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 24px var(--green-glow);animation:float 3s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 #login-screen h1{font-size:36px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
 #login-screen p{font-size:15px;color:var(--text2);margin-top:4px;font-weight:400;text-align:center}
-.spotify-btn{display:flex;align-items:center;gap:10px;background:var(--green);color:#fff;font-family:var(--font);font-weight:600;font-size:15px;padding:13px 26px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px var(--green-glow)}
-.spotify-btn:hover{background:hsl(0,0%,0%);transform:translateY(-1px)}
-.spotify-btn svg{width:20px;height:20px}
+.login-btn-group{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:300px}
+.spotify-btn{display:flex;align-items:center;gap:10px;background:var(--green);color:#fff;font-family:var(--font);font-weight:600;font-size:15px;padding:13px 26px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px var(--green-glow);width:100%;justify-content:center}
+.spotify-btn:hover{background:hsl(0,0%,15%);transform:translateY(-1px)}
+.spotify-btn svg{width:20px;height:20px;flex-shrink:0}
+.chrome-btn{display:flex;align-items:center;gap:10px;background:#fff;color:var(--text);font-family:var(--font);font-weight:600;font-size:14px;padding:12px 22px;border-radius:50px;border:1.5px solid var(--border);cursor:pointer;transition:all .2s;width:100%;justify-content:center}
+.chrome-btn:hover{border-color:#aaa;background:var(--bg2);transform:translateY(-1px)}
+.chrome-btn svg{width:18px;height:18px;flex-shrink:0}
+.login-divider{display:flex;align-items:center;gap:10px;width:100%;color:var(--text3);font-size:12px}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── INSTALL MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:#fff;border-radius:20px;padding:32px;max-width:480px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.18);transform:translateY(12px);transition:transform .25s;position:relative}
+.modal-overlay.open .modal-box{transform:translateY(0)}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--bg2);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:16px;transition:background .15s}
+.modal-close:hover{background:var(--bg3)}
+.modal-title{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:24px}
+.step-list{display:flex;flex-direction:column;gap:16px;margin-bottom:28px}
+.step-item{display:flex;align-items:flex-start;gap:14px}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--text);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-body{}
+.step-label{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+.step-desc{font-size:12px;color:var(--text3);line-height:1.5}
+.step-desc code{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:11px;color:var(--text2)}
+.modal-download-btn{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--text);color:#fff;font-family:var(--font);font-weight:600;font-size:15px;padding:14px 24px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;width:100%;margin-bottom:10px}
+.modal-download-btn:hover{background:#222;transform:translateY(-1px)}
+.modal-download-btn svg{width:18px;height:18px}
+.modal-already{display:block;text-align:center;font-size:12px;color:var(--text3);cursor:pointer;transition:color .15s;background:none;border:none;font-family:var(--font);width:100%;padding:4px}
+.modal-already:hover{color:var(--text)}
 
 .app{display:flex;height:100vh;overflow:hidden}
 .sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
@@ -246,6 +275,50 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 </head>
 <body>
 
+<!-- ── INSTALL MODAL ── -->
+<div class="modal-overlay" id="install-modal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('install-modal').classList.remove('open')">✕</button>
+    <div class="modal-title">Install the Extension</div>
+    <div class="modal-sub">Takes 60 seconds — needed so Waveshare can read your Spotify activity.</div>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-label">Download the zip</div>
+          <div class="step-desc">Click the button below to download <code>waveshare-extension.zip</code></div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-label">Open Chrome Extensions</div>
+          <div class="step-desc">Go to <code>chrome://extensions</code> and turn on <strong>Developer mode</strong> (top-right toggle)</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-label">Load the extension</div>
+          <div class="step-desc">Click <strong>Load unpacked</strong> → unzip the file first → select the unzipped folder</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-label">Come back here and log in</div>
+          <div class="step-desc">Once installed, click "Already installed" below to connect with Spotify</div>
+        </div>
+      </div>
+    </div>
+    <button class="modal-download-btn" onclick="downloadExtension()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download Extension (.zip)
+    </button>
+    <button class="modal-already" onclick="document.getElementById('install-modal').classList.remove('open');loginWithSpotify()">Already installed → Connect with Spotify</button>
+  </div>
+</div>
+
 <div id="login-screen">
   <div style="text-align:center">
     <div class="logo-mark">
@@ -254,10 +327,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
     <h1>Waveshare</h1>
     <p>Your music, shared with friends</p>
   </div>
-  <button class="spotify-btn" onclick="loginWithSpotify()">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-    Continue with Spotify
-  </button>
+  <div class="login-btn-group">
+    <button class="chrome-btn" onclick="document.getElementById('install-modal').classList.add('open')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
+      Add to Chrome — Get Started
+    </button>
+    <div class="login-divider">already installed</div>
+    <button class="spotify-btn" onclick="loginWithSpotify()">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+      Continue with Spotify
+    </button>
+  </div>
 </div>
 
 <div class="app" id="app" style="display:none">
@@ -406,6 +486,9 @@ let progressInterval = null;
 let _followingIds = new Set();
 
 function loginWithSpotify() { window.location.href = `${API}/auth/spotify`; }
+function downloadExtension() { window.location.href = '/waveshare-extension.zip'; }
+function closeModal(e) { if(e.target === document.getElementById('install-modal')) document.getElementById('install-modal').classList.remove('open'); }
+
 async function logout() {
   localStorage.removeItem('wv_token');
   await fetch(`${API}/auth/logout`, { headers: authHeaders() });
@@ -420,15 +503,14 @@ async function init() {
   const params = new URLSearchParams(location.search);
   if (params.get('error')) { alert('Auth failed: ' + params.get('error')); history.replaceState({}, '', '/'); }
 
-  // ── UPDATED: save token AND pass it to Chrome extension ──
   if (params.get('token')) {
     localStorage.setItem('wv_token', params.get('token'));
     try {
       chrome.runtime.sendMessage(
-        'pkbgedohmmmcccdeiidcncpmkfpaoicg',  // ← REPLACE THIS after loading the extension in Chrome
+        'pkbgedohmmmcccdeiidcncpmkfpaoicg',
         { type: 'SET_TOKEN', token: params.get('token') }
       );
-    } catch(e) {} // silently ignore if extension not installed
+    } catch(e) {}
     history.replaceState({}, '', '/');
   }
 
