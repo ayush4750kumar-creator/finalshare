@@ -10,7 +10,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-app.set('trust proxy', 1); // ← Critical for Railway (behind proxy)
+app.set('trust proxy', 1);
 
 const PORT = process.env.PORT || 4000;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5500';
@@ -19,11 +19,14 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5500';
 const oauthStates = new Map();
 const userStore = new Map();
 
+// ─── NEW: Extension now-playing store (userId -> track data) ──────────────────
+const extensionNowPlaying = new Map();
+
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: FRONTEND_URL,
+  origin: [FRONTEND_URL, 'chrome-extension://*'],
   credentials: true
 }));
 app.use(session({
@@ -38,7 +41,6 @@ app.use(session({
   }
 }));
 
-// ─── Serve frontend static files ──────────────────────────────────────────────
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // ─── Spotify Config ───────────────────────────────────────────────────────────
@@ -77,7 +79,6 @@ async function spotifyGet(tokenObj, endpoint) {
     tokenObj.accessToken = tokens.access_token;
     tokenObj.tokenExpiry = Date.now() + tokens.expires_in * 1000;
     if (tokens.refresh_token) tokenObj.refreshToken = tokens.refresh_token;
-
     if (tokenObj.userId && userStore.has(tokenObj.userId)) {
       const stored = userStore.get(tokenObj.userId);
       stored.accessToken = tokenObj.accessToken;
@@ -94,8 +95,6 @@ async function spotifyGet(tokenObj, endpoint) {
 // ─── Auth Routes ──────────────────────────────────────────────────────────────
 app.get('/api/auth/spotify', (req, res) => {
   const state = crypto.randomBytes(16).toString('hex');
-  
-  
   const params = new URLSearchParams({
     response_type: 'code',
     client_id: SPOTIFY_CLIENT_ID,
@@ -109,9 +108,6 @@ app.get('/api/auth/spotify', (req, res) => {
 app.get('/api/auth/spotify/callback', async (req, res) => {
   const { code, state, error } = req.query;
   if (error) return res.redirect(`${FRONTEND_URL}?error=${error}`);
-  
-  
-
   try {
     const tokenRes = await axios.post('https://accounts.spotify.com/api/token',
       new URLSearchParams({ grant_type: 'authorization_code', code, redirect_uri: REDIRECT_URI }),
@@ -122,17 +118,14 @@ app.get('/api/auth/spotify/callback', async (req, res) => {
         }
       }
     );
-
     const { access_token, refresh_token, expires_in } = tokenRes.data;
     req.session.accessToken  = access_token;
     req.session.refreshToken = refresh_token;
     req.session.tokenExpiry  = Date.now() + expires_in * 1000;
-
     const profile = await spotifyGet(req.session, '/me');
     req.userId   = profile.id;
     req.session.userName = profile.display_name;
     req.session.userImg  = profile.images?.[0]?.url || null;
-
     const existing = userStore.get(profile.id) || {};
     userStore.set(profile.id, {
       userId: profile.id,
@@ -149,7 +142,6 @@ app.get('/api/auth/spotify/callback', async (req, res) => {
       following: existing.following || new Set(),
       lastSeen: Date.now()
     });
-
     const token = jwt.sign({ userId: profile.id }, JWT_SECRET, { expiresIn: '7d' });
     res.redirect(`${FRONTEND_URL}?token=${token}`);
   } catch (err) {
@@ -200,12 +192,35 @@ app.get('/api/me', requireAuth, async (req, res) => {
   }
 });
 
+// ─── NOW PLAYING: returns Spotify OR extension data (extension takes priority) ─
 app.get('/api/now-playing', requireAuth, async (req, res) => {
+  // Check if extension sent something recently (within last 5 minutes)
+  const extData = extensionNowPlaying.get(req.userId);
+  if (extData && (Date.now() - extData.timestamp) < 5 * 60 * 1000) {
+    return res.json({
+      playing: true,
+      source: 'extension',
+      track: {
+        id: null,
+        name: extData.song,
+        artist: '',
+        album: '',
+        image: extData.thumbnail || null,
+        duration_ms: 0,
+        progress_ms: 0,
+        url: extData.url || null
+      }
+    });
+  }
+  // Fallback to Spotify API
   try {
-    const data = await spotifyGet(req.session, '/me/player/currently-playing');
+    const user = userStore.get(req.userId);
+    if (!user) return res.json({ playing: false });
+    const data = await spotifyGet(user, '/me/player/currently-playing');
     if (!data || !data.item) return res.json({ playing: false });
     res.json({
       playing: data.is_playing,
+      source: 'spotify',
       track: {
         id: data.item.id,
         name: data.item.name,
@@ -222,9 +237,39 @@ app.get('/api/now-playing', requireAuth, async (req, res) => {
   }
 });
 
+// ─── NEW: Extension sends current song here ────────────────────────────────────
+// Called by Chrome extension every time song changes
+app.post('/api/extension/now-playing', requireAuth, (req, res) => {
+  const { song, platform, thumbnail, url } = req.body;
+  if (!song) return res.status(400).json({ error: 'song is required' });
+
+  extensionNowPlaying.set(req.userId, {
+    song,
+    platform,
+    thumbnail: thumbnail || null,
+    url: url || null,
+    timestamp: Date.now()
+  });
+
+  // Update lastSeen in userStore
+  const user = userStore.get(req.userId);
+  if (user) user.lastSeen = Date.now();
+
+  console.log(`[Extension] ${req.userId} is listening to: ${song} (${platform})`);
+  res.json({ success: true });
+});
+
+// ─── NEW: Extension clears now playing (user stopped/paused) ──────────────────
+app.delete('/api/extension/now-playing', requireAuth, (req, res) => {
+  extensionNowPlaying.delete(req.userId);
+  res.json({ success: true });
+});
+
 app.get('/api/recent', requireAuth, async (req, res) => {
   try {
-    const data = await spotifyGet(req.session, '/me/player/recently-played?limit=30');
+    const user = userStore.get(req.userId);
+    if (!user) return res.status(401).json({ error: 'User not in store' });
+    const data = await spotifyGet(user, '/me/player/recently-played?limit=30');
     const tracks = data.items.map(item => ({
       id: item.track.id,
       name: item.track.name,
@@ -243,7 +288,9 @@ app.get('/api/recent', requireAuth, async (req, res) => {
 app.get('/api/top-tracks', requireAuth, async (req, res) => {
   const range = req.query.range || 'short_term';
   try {
-    const data = await spotifyGet(req.session, `/me/top/tracks?limit=10&time_range=${range}`);
+    const user = userStore.get(req.userId);
+    if (!user) return res.status(401).json({ error: 'User not in store' });
+    const data = await spotifyGet(user, `/me/top/tracks?limit=10&time_range=${range}`);
     const tracks = data.items.map((t, i) => ({
       rank: i + 1,
       id: t.id,
@@ -262,7 +309,9 @@ app.get('/api/top-tracks', requireAuth, async (req, res) => {
 app.get('/api/top-artists', requireAuth, async (req, res) => {
   const range = req.query.range || 'short_term';
   try {
-    const data = await spotifyGet(req.session, `/me/top/artists?limit=6&time_range=${range}`);
+    const user = userStore.get(req.userId);
+    if (!user) return res.status(401).json({ error: 'User not in store' });
+    const data = await spotifyGet(user, `/me/top/artists?limit=6&time_range=${range}`);
     const artists = data.items.map((a, i) => ({
       rank: i + 1, id: a.id, name: a.name,
       genres: a.genres.slice(0, 2),
@@ -305,20 +354,36 @@ app.get('/api/social/friends', requireAuth, async (req, res) => {
     if (!friend) continue;
 
     let nowPlaying = null;
-    try {
-      const np = await spotifyGet(friend, `/me/player/currently-playing`);
-      if (np && np.item && np.is_playing) {
-        nowPlaying = {
-          playing: true,
-          name: np.item.name,
-          artist: np.item.artists.map(a => a.name).join(', '),
-          image: np.item.album.images?.[0]?.url || null,
-          url: np.item.external_urls.spotify,
-          progress_ms: np.progress_ms,
-          duration_ms: np.item.duration_ms
-        };
-      }
-    } catch (e) {}
+
+    // Check extension data first
+    const extData = extensionNowPlaying.get(friendId);
+    if (extData && (Date.now() - extData.timestamp) < 5 * 60 * 1000) {
+      nowPlaying = {
+        playing: true,
+        name: extData.song,
+        artist: '',
+        image: extData.thumbnail || null,
+        url: extData.url || null,
+        source: 'extension'
+      };
+    } else {
+      // Fallback to Spotify API
+      try {
+        const np = await spotifyGet(friend, `/me/player/currently-playing`);
+        if (np && np.item && np.is_playing) {
+          nowPlaying = {
+            playing: true,
+            name: np.item.name,
+            artist: np.item.artists.map(a => a.name).join(', '),
+            image: np.item.album.images?.[0]?.url || null,
+            url: np.item.external_urls.spotify,
+            progress_ms: np.progress_ms,
+            duration_ms: np.item.duration_ms,
+            source: 'spotify'
+          };
+        }
+      } catch (e) {}
+    }
 
     friends.push({
       id: friend.profile.id,
@@ -337,7 +402,6 @@ app.post('/api/social/follow/:userId', requireAuth, (req, res) => {
   const me = userStore.get(myId);
   if (!me) return res.status(400).json({ error: 'User not found in store' });
   if (!userStore.has(req.params.userId)) return res.status(404).json({ error: 'Target user not found' });
-
   me.following.add(req.params.userId);
   res.json({ success: true, following: [...me.following] });
 });
@@ -346,7 +410,6 @@ app.delete('/api/social/follow/:userId', requireAuth, (req, res) => {
   const myId = req.userId;
   const me = userStore.get(myId);
   if (!me) return res.status(400).json({ error: 'User not found in store' });
-
   me.following.delete(req.params.userId);
   res.json({ success: true, following: [...me.following] });
 });

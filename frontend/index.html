@@ -104,7 +104,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 .tab-btn{padding:5px 12px;border-radius:50px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;font-family:var(--font)}
 .tab-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
 
-/* ── Merged "Aman is playing" card ── */
 .merged-playing-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
 .merged-playing-card:hover{border-color:var(--border2);box-shadow:var(--shadow-md)}
 .mc-top-row{display:flex;align-items:center;gap:12px}
@@ -315,7 +314,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
     <div class="content">
       <div class="page active" id="page-feed">
 
-        <!-- ── Merged "Aman is playing" card ── -->
         <div class="merged-playing-card" id="merged-card-wrap" onclick="showPage('profile',null)">
           <div class="mc-top-row">
             <div class="mc-avatar" id="merged-avatar">?</div>
@@ -421,7 +419,19 @@ function setBottomNav(id) {
 async function init() {
   const params = new URLSearchParams(location.search);
   if (params.get('error')) { alert('Auth failed: ' + params.get('error')); history.replaceState({}, '', '/'); }
-  if (params.get('token')) { localStorage.setItem('wv_token', params.get('token')); history.replaceState({}, '', '/'); }
+
+  // ── UPDATED: save token AND pass it to Chrome extension ──
+  if (params.get('token')) {
+    localStorage.setItem('wv_token', params.get('token'));
+    try {
+      chrome.runtime.sendMessage(
+        'pkbgedohmmmcccdeiidcncpmkfpaoicg',  // ← REPLACE THIS after loading the extension in Chrome
+        { type: 'SET_TOKEN', token: params.get('token') }
+      );
+    } catch(e) {} // silently ignore if extension not installed
+    history.replaceState({}, '', '/');
+  }
+
   try {
     const res = await fetch(`${API}/status`, { headers: authHeaders() });
     const status = await res.json();
@@ -455,7 +465,6 @@ async function loadNowPlaying() {
     const data = await res.json();
     if (data.playing && data.track) {
       const t = data.track;
-      // Show the track section inside the merged card
       document.getElementById('merged-live').style.display = 'inline-flex';
       document.getElementById('merged-divider').style.display = 'block';
       document.getElementById('merged-track-section').style.display = 'block';
@@ -473,20 +482,17 @@ async function loadNowPlaying() {
         if (elapsed >= t.duration_ms) { clearInterval(progressInterval); return; }
         updateProgress(elapsed, t.duration_ms);
       }, 1000);
-      // Profile page NP card
       document.getElementById('profile-np-card').style.display = 'block';
       document.getElementById('pnp-img').src = t.image || '';
       document.getElementById('pnp-track').textContent = t.name;
       document.getElementById('pnp-artist').textContent = t.artist;
       document.getElementById('pnp-link').href = t.url || '#';
-      // Mini sidebar player
       document.getElementById('mini-player').style.display = 'block';
       document.getElementById('mini-img').src = t.image || '';
       document.getElementById('mini-track').textContent = t.name;
       document.getElementById('mini-artist').textContent = t.artist;
       document.getElementById('mini-wave').classList.toggle('paused', !data.playing);
     } else {
-      // Not playing — collapse track section
       document.getElementById('merged-live').style.display = 'none';
       document.getElementById('merged-divider').style.display = 'none';
       document.getElementById('merged-track-section').style.display = 'none';
