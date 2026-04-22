@@ -1,718 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Waveshare — Social Listening</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#ffffff;
-  --bg2:#f7f7f8;
-  --bg3:#f0f0f2;
-  --bg4:#e8e8ec;
-  --border:#e2e2e6;
-  --border2:#d0d0d6;
-  --text:#111112;
-  --text2:#555558;
-  --text3:#9999a2;
-  --green:#000000;
-  --green-light:#f0fdf4;
-  --green-border:#e0e0e0;
-  --green-glow:rgba(0, 0, 0, 0.12);
-  --accent:#000000;
-  --red:#727272;
-  --radius:12px;
-  --radius-sm:8px;
-  --font:'Figtree',sans-serif;
-  --bottom-nav-h:64px;
-  --shadow:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.05);
-  --shadow-md:0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.05);
-}
-body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;overflow:hidden;-webkit-font-smoothing:antialiased}
-
-/* ── LOGIN SCREEN ── */
-#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:28px;background:#fff;padding:20px}
-.logo-mark{width:64px;height:64px;border-radius:16px;background:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 24px var(--green-glow);animation:float 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-#login-screen h1{font-size:36px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
-#login-screen p{font-size:15px;color:var(--text2);margin-top:4px;font-weight:400;text-align:center}
-.login-btn-group{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:300px}
-.spotify-btn{display:flex;align-items:center;gap:10px;background:var(--green);color:#fff;font-family:var(--font);font-weight:600;font-size:15px;padding:13px 26px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px var(--green-glow);width:100%;justify-content:center}
-.spotify-btn:hover{background:hsl(0,0%,15%);transform:translateY(-1px)}
-.spotify-btn svg{width:20px;height:20px;flex-shrink:0}
-.chrome-btn{display:flex;align-items:center;gap:10px;background:#fff;color:var(--text);font-family:var(--font);font-weight:600;font-size:14px;padding:12px 22px;border-radius:50px;border:1.5px solid var(--border);cursor:pointer;transition:all .2s;width:100%;justify-content:center}
-.chrome-btn:hover{border-color:#aaa;background:var(--bg2);transform:translateY(-1px)}
-.chrome-btn svg{width:18px;height:18px;flex-shrink:0}
-.login-divider{display:flex;align-items:center;gap:10px;width:100%;color:var(--text3);font-size:12px}
-.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-
-/* ── INSTALL MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal-box{background:#fff;border-radius:20px;padding:32px;max-width:480px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.18);transform:translateY(12px);transition:transform .25s;position:relative}
-.modal-overlay.open .modal-box{transform:translateY(0)}
-.modal-close{position:absolute;top:16px;right:16px;background:var(--bg2);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:16px;transition:background .15s}
-.modal-close:hover{background:var(--bg3)}
-.modal-title{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
-.modal-sub{font-size:13px;color:var(--text2);margin-bottom:24px}
-.step-list{display:flex;flex-direction:column;gap:16px;margin-bottom:28px}
-.step-item{display:flex;align-items:flex-start;gap:14px}
-.step-num{width:32px;height:32px;border-radius:50%;background:var(--text);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.step-body{}
-.step-label{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
-.step-desc{font-size:12px;color:var(--text3);line-height:1.5}
-.step-desc code{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:11px;color:var(--text2)}
-.modal-download-btn{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--text);color:#fff;font-family:var(--font);font-weight:600;font-size:15px;padding:14px 24px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;width:100%;margin-bottom:10px}
-.modal-download-btn:hover{background:#222;transform:translateY(-1px)}
-.modal-download-btn svg{width:18px;height:18px}
-.modal-already{display:block;text-align:center;font-size:12px;color:var(--text3);cursor:pointer;transition:color .15s;background:none;border:none;font-family:var(--font);width:100%;padding:4px}
-.modal-already:hover{color:var(--text)}
-
-.app{display:flex;height:100vh;overflow:hidden}
-.sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.sidebar-logo{padding:20px 16px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
-.logo-icon{width:30px;height:30px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.logo-icon svg{width:15px;height:15px;stroke:#fff;fill:none}
-.logo-text{font-size:16px;font-weight:700;letter-spacing:-.3px;color:var(--text)}
-.nav{padding:10px 8px 0;flex-shrink:0}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);font-size:13px;font-weight:500;transition:all .15s;margin-bottom:2px}
-.nav-item:hover{background:var(--bg3);color:var(--text)}
-.nav-item.active{background:#fff;color:var(--text);box-shadow:var(--shadow)}
-.nav-item svg{width:16px;height:16px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
-.sidebar-section{padding:16px 16px 6px;font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.8px;text-transform:uppercase}
-#sidebar-friends{overflow-y:auto;flex:1}
-.friend-item{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;transition:background .15s}
-.friend-item:hover{background:var(--bg3)}
-.av-sm{width:28px;height:28px;border-radius:50%;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
-.status-ring{position:relative;border-radius:50%}
-.status-ring::after{content:'';position:absolute;bottom:0;right:0;width:8px;height:8px;border-radius:50%;border:2px solid var(--bg2)}
-.status-ring.offline::after{background:var(--border2)}
-.status-ring.playing::after{background:var(--green);animation:pulse 1.5s infinite}
-.friend-info{flex:1;min-width:0}
-.friend-name{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.friend-song{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
-.now-playing-mini{padding:12px;border-top:1px solid var(--border)}
-.npm-inner{display:flex;align-items:center;gap:10px;background:#fff;border-radius:var(--radius-sm);padding:10px;box-shadow:var(--shadow)}
-.npm-art{width:34px;height:34px;border-radius:6px;flex-shrink:0;background:var(--bg3);overflow:hidden}
-.npm-art img{width:100%;height:100%;object-fit:cover}
-.npm-info{flex:1;min-width:0}
-.npm-track{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
-.npm-artist{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
-.waveform{display:flex;align-items:center;gap:2px;height:16px;flex-shrink:0}
-.wave-bar{width:2px;border-radius:2px;background:var(--green);animation:wave 1.2s infinite ease-in-out}
-.wave-bar:nth-child(1){height:4px}.wave-bar:nth-child(2){animation-delay:.15s;height:10px}.wave-bar:nth-child(3){animation-delay:.3s;height:14px}.wave-bar:nth-child(4){animation-delay:.45s;height:8px}.wave-bar:nth-child(5){animation-delay:.6s;height:12px}
-@keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.3)}}
-.waveform.paused .wave-bar{animation:none;height:4px}
-
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.topbar{height:54px;flex-shrink:0;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:10px}
-.page-title{font-size:16px;font-weight:700;flex:1;letter-spacing:-.2px;color:var(--text)}
-.user-chip{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:50px;padding:4px 12px 4px 4px;cursor:pointer;transition:all .15s}
-.user-chip:hover{background:var(--bg3)}
-.chip-avatar{width:26px;height:26px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
-.chip-avatar img{width:100%;height:100%;object-fit:cover}
-.chip-avatar svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2}
-.chip-name{font-size:12px;font-weight:500;color:var(--text2)}
-.logout-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:50px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:12px;cursor:pointer;transition:all .15s;font-family:var(--font);white-space:nowrap}
-.logout-btn:hover{color:var(--red);border-color:var(--red);background:#fef2f2}
-.content{flex:1;overflow-y:auto;padding:20px}
-.content::-webkit-scrollbar{width:4px}
-.content::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-
-.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--bottom-nav-h);background:#fff;border-top:1px solid var(--border);z-index:100;align-items:stretch}
-.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--text3);font-size:10px;font-weight:500;transition:color .15s;padding:8px 4px;border:none;background:transparent;font-family:var(--font)}
-.bn-item svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
-.bn-item.active{color:var(--green)}
-
-.section-title{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:12px}
-.section-tab-row{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-.tab-btn{padding:5px 12px;border-radius:50px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;font-family:var(--font)}
-.tab-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
-
-.merged-playing-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
-.merged-playing-card:hover{border-color:var(--border2);box-shadow:var(--shadow-md)}
-.mc-top-row{display:flex;align-items:center;gap:12px}
-.mc-avatar{width:42px;height:42px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden}
-.mc-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.mc-user-meta{flex:1;min-width:0}
-.mc-user-name{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.2px}
-.mc-user-sub{font-size:11px;color:var(--text3);margin-top:2px}
-.mc-live-pill{display:inline-flex;align-items:center;gap:5px;background:var(--green-light);border:1px solid var(--green-border);color:var(--green);padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;letter-spacing:.4px;flex-shrink:0}
-.mc-divider{height:1px;background:var(--border);margin:14px 0}
-.mc-track-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.mc-art{width:46px;height:46px;border-radius:8px;flex-shrink:0;background:var(--bg3);overflow:hidden;box-shadow:var(--shadow)}
-.mc-art img{width:100%;height:100%;object-fit:cover}
-.mc-track-meta{flex:1;min-width:0}
-.mc-track-name{font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.2px}
-.mc-track-artist{font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
-
-.now-playing-card{background:var(--green-light);border:1px solid var(--green-border);border-radius:var(--radius);padding:18px;margin-bottom:20px}
-.np-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.np-art{width:60px;height:60px;border-radius:10px;flex-shrink:0;background:var(--bg3);overflow:hidden;box-shadow:var(--shadow-md)}
-.np-art img{width:100%;height:100%;object-fit:cover}
-.np-meta{flex:1;min-width:0}
-.live-badge{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--green-border);color:var(--green);padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;letter-spacing:.4px;margin-bottom:6px}
-.live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.np-track{font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.2px;color:var(--text)}
-.np-artist{font-size:13px;color:var(--text2);margin-top:3px}
-.np-waveform{display:flex;align-items:center;gap:3px;height:22px;flex-shrink:0}
-.np-bar{width:3px;border-radius:3px;background:var(--green);animation:wave 1.2s infinite ease-in-out}
-.np-bar:nth-child(1){height:6px}.np-bar:nth-child(2){animation-delay:.12s;height:14px}.np-bar:nth-child(3){animation-delay:.24s;height:20px}.np-bar:nth-child(4){animation-delay:.36s;height:11px}.np-bar:nth-child(5){animation-delay:.48s;height:16px}.np-bar:nth-child(6){animation-delay:.6s;height:9px}
-.progress-wrap{margin-top:14px}
-.progress-bar{height:3px;background:var(--green-border);border-radius:2px;overflow:hidden}
-.progress-fill{height:100%;background:var(--green);border-radius:2px;transition:width 1s linear}
-.progress-times{display:flex;justify-content:space-between;margin-top:5px}
-.progress-times span{font-size:10px;color:var(--text3);font-weight:500}
-.open-spotify{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;background:#fff;border:1px solid var(--green-border);color:var(--green);font-size:11px;font-weight:600;text-decoration:none;transition:all .15s}
-.open-spotify:hover{background:var(--green);color:#fff}
-
-.friend-activity-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:8px;display:flex;gap:12px;align-items:center;transition:all .2s;cursor:pointer;box-shadow:var(--shadow)}
-.friend-activity-card:hover{border-color:var(--border2);box-shadow:var(--shadow-md)}
-.fac-avatar{width:42px;height:42px;border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;position:relative;color:#fff}
-.fac-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.fac-playing-dot{position:absolute;bottom:1px;right:1px;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid #fff;animation:pulse 1.5s infinite}
-.fac-info{flex:1;min-width:0}
-.fac-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px}
-.fac-track-row{display:flex;align-items:center;gap:10px}
-.fac-art{width:34px;height:34px;border-radius:5px;flex-shrink:0;background:var(--bg3);overflow:hidden}
-.fac-art img{width:100%;height:100%;object-fit:cover}
-.fac-track-info{flex:1;min-width:0}
-.fac-track{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
-.fac-artist{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-.fac-idle{font-size:12px;color:var(--text3)}
-.fac-mini-wave{display:flex;align-items:center;gap:2px;height:14px;flex-shrink:0}
-.fac-mini-wave .wave-bar{background:var(--green)}
-
-.discover-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:20px}
-.discover-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:12px;transition:all .2s;box-shadow:var(--shadow)}
-.discover-card:hover{border-color:var(--border2);box-shadow:var(--shadow-md)}
-.dc-avatar{width:42px;height:42px;border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff}
-.dc-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.dc-info{flex:1;min-width:0}
-.dc-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;color:var(--text)}
-.dc-sub{font-size:11px;color:var(--text3)}
-.follow-btn{padding:5px 12px;border-radius:50px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;font-family:var(--font);white-space:nowrap;flex-shrink:0}
-.follow-btn:hover{background:var(--green-light);border-color:var(--green);color:var(--green)}
-.follow-btn.following{background:var(--green-light);border-color:var(--green);color:var(--green)}
-.follow-btn.following:hover{background:#fef2f2;border-color:var(--red);color:var(--red)}
-
-.track-list{display:flex;flex-direction:column;gap:4px}
-.track-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--radius-sm);border:1px solid transparent;transition:all .15s;cursor:pointer}
-.track-item:hover{background:var(--bg2);border-color:var(--border)}
-.track-rank{font-size:11px;font-weight:600;color:var(--text3);width:18px;text-align:center;flex-shrink:0}
-.track-art{width:40px;height:40px;border-radius:7px;flex-shrink:0;background:var(--bg3);overflow:hidden}
-.track-art img{width:100%;height:100%;object-fit:cover}
-.track-info{flex:1;min-width:0}
-.track-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
-.track-artist{font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-.track-pop{width:32px;height:3px;background:var(--bg3);border-radius:2px;flex-shrink:0;overflow:hidden}
-.track-pop-fill{height:100%;background:var(--accent);border-radius:2px}
-
-.artists-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.artist-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
-.artist-card:hover{background:var(--bg2);border-color:var(--border2);transform:translateY(-1px);box-shadow:var(--shadow-md)}
-.artist-img{width:56px;height:56px;border-radius:50%;margin:0 auto 9px;background:var(--bg3);overflow:hidden}
-.artist-img img{width:100%;height:100%;object-fit:cover}
-.artist-name{font-size:12px;font-weight:600;margin-bottom:3px;color:var(--text)}
-.artist-genre{font-size:11px;color:var(--text3)}
-
-.recent-item{display:flex;align-items:center;gap:10px;padding:8px;border-radius:var(--radius-sm);transition:background .15s;cursor:pointer;margin-bottom:3px}
-.recent-item:hover{background:var(--bg2)}
-.recent-art{width:38px;height:38px;border-radius:6px;background:var(--bg3);overflow:hidden;flex-shrink:0}
-.recent-art img{width:100%;height:100%;object-fit:cover}
-.recent-info{flex:1;min-width:0}
-.recent-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
-.recent-artist{font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-.recent-time{font-size:10px;font-weight:500;color:var(--text3);flex-shrink:0}
-
-.profile-header{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px;box-shadow:var(--shadow);flex-wrap:wrap}
-.profile-avatar{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden;background:var(--green)}
-.profile-avatar img{width:100%;height:100%;object-fit:cover}
-.profile-name{font-size:22px;font-weight:700;letter-spacing:-.4px;color:var(--text)}
-.profile-handle{font-size:12px;color:var(--text3);margin-top:3px}
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
-.stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
-.stat-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:5px}
-.stat-value{font-size:24px;font-weight:700;color:var(--text);letter-spacing:-.5px}
-.stat-sub{font-size:11px;color:var(--text3);margin-top:2px}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.mt-20{margin-top:20px}
-.page{display:none}.page.active{display:block}
-.loading{display:flex;align-items:center;justify-content:center;padding:48px;color:var(--text3);font-size:13px}
-.loading::before{content:'';width:16px;height:16px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--green);animation:spin .7s linear infinite;margin-right:10px;flex-shrink:0}
-@keyframes spin{to{transform:rotate(360deg)}}
-.empty{text-align:center;padding:48px;color:var(--text3)}
-.empty p{font-size:13px;margin-top:6px}
-.divider{height:1px;background:var(--border);margin:20px 0}
-
-@media(max-width:768px){
-  body{overflow:hidden}
-  .sidebar{display:none}
-  .bottom-nav{display:flex}
-  .app{flex-direction:column}
-  .main{height:100vh;flex:1}
-  .topbar{padding:0 14px;gap:8px}
-  .chip-name{display:none}
-  .logout-btn span{display:none}
-  .content{padding:14px;padding-bottom:calc(var(--bottom-nav-h) + 14px)}
-  .two-col{grid-template-columns:1fr}
-  .artists-grid{grid-template-columns:repeat(2,1fr)}
-  .stats-row{gap:6px}
-  .stat-card{padding:10px 8px}
-  .stat-value{font-size:20px}
-  .discover-grid{grid-template-columns:1fr}
-  .profile-name{font-size:18px}
-}
-@media(max-width:400px){
-  #login-screen h1{font-size:28px}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>MarketPulse</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<!-- ── INSTALL MODAL ── -->
-<div class="modal-overlay" id="install-modal" onclick="closeModal(event)">
-  <div class="modal-box">
-    <button class="modal-close" onclick="document.getElementById('install-modal').classList.remove('open')">✕</button>
-    <div class="modal-title">Install the Extension</div>
-    <div class="modal-sub">Takes 60 seconds — needed so Waveshare can read your Spotify activity.</div>
-    <div class="step-list">
-      <div class="step-item">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <div class="step-label">Download the zip</div>
-          <div class="step-desc">Click the button below to download <code>waveshare-extension.zip</code></div>
-        </div>
-      </div>
-      <div class="step-item">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <div class="step-label">Open Chrome Extensions</div>
-          <div class="step-desc">Go to <code>chrome://extensions</code> and turn on <strong>Developer mode</strong> (top-right toggle)</div>
-        </div>
-      </div>
-      <div class="step-item">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <div class="step-label">Load the extension</div>
-          <div class="step-desc">Click <strong>Load unpacked</strong> → unzip the file first → select the unzipped folder</div>
-        </div>
-      </div>
-      <div class="step-item">
-        <div class="step-num">4</div>
-        <div class="step-body">
-          <div class="step-label">Come back here and log in</div>
-          <div class="step-desc">Once installed, click "Already installed" below to connect with Spotify</div>
-        </div>
-      </div>
-    </div>
-    <button class="modal-download-btn" onclick="downloadExtension()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Download Extension (.zip)
-    </button>
-    <button class="modal-already" onclick="document.getElementById('install-modal').classList.remove('open');loginWithSpotify()">Already installed → Connect with Spotify</button>
-  </div>
-</div>
+  <div id="toast" class="toast"></div>
 
-<div id="login-screen">
-  <div style="text-align:center">
-    <div class="logo-mark">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-    </div>
-    <h1>Waveshare</h1>
-    <p>Your music, shared with friends</p>
-  </div>
-  <div class="login-btn-group">
-    <button class="chrome-btn" onclick="document.getElementById('install-modal').classList.add('open')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
-      Add to Chrome — Get Started
-    </button>
-    <div class="login-divider">already installed</div>
-    <button class="spotify-btn" onclick="loginWithSpotify()">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-      Continue with Spotify
-    </button>
-  </div>
-</div>
-
-<div class="app" id="app" style="display:none">
-  <div class="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-icon"><svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
-      <span class="logo-text">Waveshare</span>
-    </div>
-    <nav class="nav">
-      <div class="nav-item active" onclick="showPage('feed',this)">
-        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Feed
+  <!-- Auth Page -->
+  <div id="auth-page" style="display:none; justify-content:center; align-items:center; min-height:100vh; background:#000;">
+    <div class="auth-box">
+      <h1 class="auth-logo">MarketPulse</h1>
+      <p class="auth-sub">Real-time market intelligence</p>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Login</button>
+        <button class="auth-tab" onclick="switchTab('register')">Register</button>
       </div>
-      <div class="nav-item" onclick="showPage('following',this)">
-        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        Following
+      <div id="login-form">
+        <input id="login-email" type="email" placeholder="Email" class="auth-input" />
+        <input id="login-password" type="password" placeholder="Password" class="auth-input" />
+        <p id="login-error" class="auth-error"></p>
+        <button class="auth-btn" onclick="login()">Login</button>
       </div>
-      <div class="nav-item" onclick="showPage('profile',this)">
-        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        My Profile
-      </div>
-    </nav>
-    <div class="sidebar-section">Friends Listening</div>
-    <div id="sidebar-friends">
-      <div style="padding:12px 14px;font-size:11px;color:var(--text3)">loading…</div>
-    </div>
-    <div class="now-playing-mini" id="mini-player" style="display:none">
-      <div class="npm-inner">
-        <div class="npm-art"><img id="mini-img" src="" alt=""/></div>
-        <div class="npm-info">
-          <div class="npm-track" id="mini-track">—</div>
-          <div class="npm-artist" id="mini-artist">—</div>
-        </div>
-        <div class="waveform" id="mini-wave">
-          <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-        </div>
+      <div id="register-form" style="display:none">
+        <input id="reg-email" type="email" placeholder="Email" class="auth-input" />
+        <input id="reg-password" type="password" placeholder="Password (min 6 chars)" class="auth-input" />
+        <p id="reg-error" class="auth-error"></p>
+        <button class="auth-btn" onclick="register()">Create Account</button>
       </div>
     </div>
   </div>
 
-  <div class="main">
-    <div class="topbar">
-      <div class="page-title" id="page-title">Waveshare - Ayush is Genius</div>
-      <div class="user-chip" onclick="showPage('profile',null)">
-        <div class="chip-avatar" id="chip-avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <span class="chip-name" id="chip-name">Loading…</span>
+  <!-- Main Page -->
+  <div id="main-page" style="display:none">
+    <header>
+
+      <!-- Top bar: Logo + Search icon + Profile -->
+      <div class="top-bar">
+        <div class="logo">MarketPulse</div>
+        <div class="top-actions">
+          <button class="icon-btn" id="search-toggle" onclick="toggleSearch('search')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+          <div class="profile-wrap">
+            <button class="profile-btn" id="profile-btn" onclick="toggleProfile()">
+              <span id="profile-initial">U</span>
+            </button>
+            <div class="profile-dropdown" id="profile-dropdown">
+              <div class="profile-header">
+                <div class="profile-name">My Account</div>
+                <div class="profile-email" id="profile-email-display"></div>
+              </div>
+              <button class="profile-item" onclick="filterByStock('bookmarks'); closeProfile()">Saved Articles</button>
+              <button class="profile-item" onclick="window.location.href='/pipeline2.html'; closeProfile()">⚡ Test Pipeline</button>
+              <button class="profile-item" onclick="showAboutPage(); closeProfile()">About</button>
+              <button class="profile-item" onclick="refreshNow(); closeProfile()">Refresh Feed</button>
+              <button class="profile-item danger" onclick="logout()">Logout</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <button class="logout-btn" onclick="logout()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Sign out</span>
+
+      <!-- Expandable search bar -->
+      <div class="search-wrap" id="search-wrap" style="display:none">
+        <div class="search-inner">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2.5" style="flex-shrink:0">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input id="stock-search" class="search-bar" type="text"
+            placeholder="Search stocks (e.g. AAPL, Google...)"
+            oninput="showSuggestions()"
+            onkeydown="handleSearch(event)"
+            spellcheck="false"
+            autocomplete="off" />
+          <button class="search-close" onclick="toggleSearch()">✕</button>
+        </div>
+        <div id="suggestions" class="suggestions"></div>
+      </div>
+
+      <!-- Circular stock tabs -->
+      <div class="stock-tabs" id="stock-tabs"></div>
+
+      <!-- 3 sentiment buttons full width -->
+      <div class="sentiment-filters">
+        <button class="sentiment-btn bullish" onclick="filterBySentiment('bullish')">Bullish</button>
+        <button class="sentiment-btn bearish" onclick="filterBySentiment('bearish')">Bearish</button>
+        <button class="sentiment-btn neutral active" onclick="filterBySentiment('all')">All</button>
+      </div>
+
+    </header>
+
+    <main id="news-grid" class="news-grid">
+      <div class="loading">Loading market news...</div>
+    </main>
+  </div>
+
+  <!-- About Page -->
+  <div id="about-page" style="display:none">
+    <div class="about-header">
+      <button class="about-back" onclick="hideAboutPage()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Back
       </button>
+      <div class="about-header-title">About</div>
     </div>
 
-    <div class="content">
-      <div class="page active" id="page-feed">
+    <div class="about-body">
 
-        <div class="merged-playing-card" id="merged-card-wrap" onclick="showPage('profile',null)">
-          <div class="mc-top-row">
-            <div class="mc-avatar" id="merged-avatar">?</div>
-            <div class="mc-user-meta">
-              <div class="mc-user-name" id="merged-name">You</div>
-              <div class="mc-user-sub" id="merged-sub">Tap to view your profile</div>
-            </div>
-            <div class="mc-live-pill" id="merged-live" style="display:none">
-              <div class="live-dot"></div>LIVE
+      <div class="about-hero">
+        <div class="about-logo-mark">BB</div>
+        <h1 class="about-company">BlueBlack Corporation</h1>
+        <p class="about-tagline">Bengaluru, India</p>
+      </div>
+
+      <div class="about-section">
+        <h2 class="about-section-title">About</h2>
+        <p class="about-section-text">MarketPulse is a product of BlueBlack Corporation.</p>
+      </div>
+
+      <div class="about-section">
+        <h2 class="about-section-title">Founders</h2>
+        <div class="about-founders">
+          <div class="about-founder-card">
+            <div class="founder-avatar">A</div>
+            <div class="founder-info">
+              <div class="founder-name">Ayush</div>
+              <div class="founder-role">Co-Founder</div>
             </div>
           </div>
-          <div id="merged-divider" style="display:none;height:1px;background:var(--border);margin:14px 0"></div>
-          <div id="merged-track-section" style="display:none">
-            <div class="mc-track-row">
-              <div class="mc-art"><img id="merged-img" src="" alt=""/></div>
-              <div class="mc-track-meta">
-                <div class="mc-track-name" id="merged-track">—</div>
-                <div class="mc-track-artist" id="merged-artist">—</div>
-              </div>
-              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-                <div class="np-waveform"><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div></div>
-                <a id="merged-link" class="open-spotify" href="#" target="_blank" onclick="event.stopPropagation()">Open</a>
-              </div>
-            </div>
-            <div class="progress-wrap" style="margin-top:4px">
-              <div class="progress-bar"><div class="progress-fill" id="merged-progress" style="width:0%"></div></div>
-              <div class="progress-times"><span id="merged-elapsed">0:00</span><span id="merged-total">0:00</span></div>
+          <div class="about-founder-card">
+            <div class="founder-avatar">S</div>
+            <div class="founder-info">
+              <div class="founder-name">Sanskar</div>
+              <div class="founder-role">Co-Founder</div>
             </div>
           </div>
         </div>
-
-        <div class="section-title mt-20">Friends Activity</div>
-        <div id="friends-feed"><div class="loading">Loading friends…</div></div>
       </div>
 
-      <div class="page" id="page-following">
-        <div class="section-title">People You Follow</div>
-        <div id="following-list" style="margin-bottom:20px"><div class="loading">Loading…</div></div>
-        <div class="section-title">Discover People</div>
-        <div id="discover-list" class="discover-grid"><div class="loading" style="grid-column:1/-1">Loading…</div></div>
-      </div>
-
-      <div class="page" id="page-profile">
-        <div class="profile-header" id="profile-header"><div class="loading">Loading profile…</div></div>
-        <div class="stats-row" id="profile-stats"></div>
-        <div id="profile-np-card" style="display:none" class="now-playing-card">
-          <div style="font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.6px;margin-bottom:12px;text-transform:uppercase">Now Playing</div>
-          <div class="np-row">
-            <div class="np-art"><img id="pnp-img" src="" alt=""/></div>
-            <div class="np-meta">
-              <div class="live-badge"><div class="live-dot"></div>LIVE</div>
-              <div class="np-track" id="pnp-track">—</div>
-              <div class="np-artist" id="pnp-artist">—</div>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-              <div class="np-waveform"><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div><div class="np-bar"></div></div>
-              <a id="pnp-link" class="open-spotify" href="#" target="_blank">Open</a>
-            </div>
+      <div class="about-section">
+        <h2 class="about-section-title">Contact</h2>
+        <div class="about-contact-card">
+          <div class="about-contact-row">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a56db" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Kumaraswamy Layout, Bengaluru, Karnataka, India</span>
+          </div>
+          <div class="about-contact-row">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a56db" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+            <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="29414c454546694b455c4c4b45484a424a465b59074a4644">[email&#160;protected]</a></span>
           </div>
         </div>
-        <div class="divider"></div>
-        <div class="section-title mt-20">Recent History</div>
-        <div id="profile-recent"><div class="loading">Loading…</div></div>
       </div>
-    </div>
-  </div>
 
-  <nav class="bottom-nav">
-    <button class="bn-item active" id="bn-feed" onclick="showPage('feed',null);setBottomNav('bn-feed')">
-      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      Feed
-    </button>
-    <button class="bn-item" id="bn-following" onclick="showPage('following',null);setBottomNav('bn-following')">
-      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-      Following
-    </button>
-    <button class="bn-item" id="bn-profile" onclick="showPage('profile',null);setBottomNav('bn-profile')">
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Profile
-    </button>
-  </nav>
-</div>
-
-<script>
-const API = '/api';
-const getToken = () => localStorage.getItem('wv_token');
-const authHeaders = () => { const t = getToken(); return t ? { 'Authorization': 'Bearer ' + t } : {}; };
-
-let progressInterval = null;
-let _followingIds = new Set();
-
-function loginWithSpotify() { window.location.href = `${API}/auth/spotify`; }
-function downloadExtension() { window.location.href = '/waveshare-extension.zip'; }
-function closeModal(e) { if(e.target === document.getElementById('install-modal')) document.getElementById('install-modal').classList.remove('open'); }
-
-async function logout() {
-  localStorage.removeItem('wv_token');
-  await fetch(`${API}/auth/logout`, { headers: authHeaders() });
-  location.reload();
-}
-function setBottomNav(id) {
-  document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id)?.classList.add('active');
-}
-
-async function init() {
-  const params = new URLSearchParams(location.search);
-  if (params.get('error')) { alert('Auth failed: ' + params.get('error')); history.replaceState({}, '', '/'); }
-
-  if (params.get('token')) {
-    localStorage.setItem('wv_token', params.get('token'));
-    try {
-      chrome.runtime.sendMessage(
-        'pkbgedohmmmcccdeiidcncpmkfpaoicg',
-        { type: 'SET_TOKEN', token: params.get('token') }
-      );
-    } catch(e) {}
-    history.replaceState({}, '', '/');
-  }
-
-  try {
-    const res = await fetch(`${API}/status`, { headers: authHeaders() });
-    const status = await res.json();
-    if (!status.loggedIn) { document.getElementById('login-screen').style.display='flex'; document.getElementById('app').style.display='none'; return; }
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app').style.display='flex';
-    loadUser(); loadNowPlaying(); loadSidebarFriends(); loadFriendsFeed();
-    setInterval(loadNowPlaying, 30000);
-    setInterval(loadSidebarFriends, 60000);
-  } catch(e) { document.getElementById('login-screen').style.display='flex'; document.getElementById('app').style.display='none'; }
-}
-
-async function loadUser() {
-  const res = await fetch(`${API}/me`, { headers: authHeaders() });
-  const user = await res.json();
-  if (user.error) return;
-  window._user = user;
-  document.getElementById('chip-name').textContent = user.name || 'You';
-  document.getElementById('merged-name').textContent = user.name || 'You';
-  if (user.image) {
-    document.getElementById('chip-avatar').innerHTML = `<img src="${user.image}" alt=""/>`;
-    document.getElementById('merged-avatar').innerHTML = `<img src="${user.image}" alt=""/>`;
-  } else {
-    document.getElementById('merged-avatar').textContent = (user.name||'Y')[0].toUpperCase();
-  }
-}
-
-async function loadNowPlaying() {
-  try {
-    const res = await fetch(`${API}/now-playing`, { headers: authHeaders() });
-    const data = await res.json();
-    if (data.playing && data.track) {
-      const t = data.track;
-      document.getElementById('merged-live').style.display = 'inline-flex';
-      document.getElementById('merged-divider').style.display = 'block';
-      document.getElementById('merged-track-section').style.display = 'block';
-      document.getElementById('merged-sub').textContent = '🎵 Currently listening';
-      document.getElementById('merged-img').src = t.image || '';
-      document.getElementById('merged-track').textContent = t.name;
-      document.getElementById('merged-artist').textContent = t.artist;
-      document.getElementById('merged-link').href = t.url || '#';
-      document.getElementById('merged-total').textContent = fmtMs(t.duration_ms);
-      updateProgress(t.progress_ms, t.duration_ms);
-      clearInterval(progressInterval);
-      let elapsed = t.progress_ms;
-      progressInterval = setInterval(() => {
-        elapsed += 1000;
-        if (elapsed >= t.duration_ms) { clearInterval(progressInterval); return; }
-        updateProgress(elapsed, t.duration_ms);
-      }, 1000);
-      document.getElementById('profile-np-card').style.display = 'block';
-      document.getElementById('pnp-img').src = t.image || '';
-      document.getElementById('pnp-track').textContent = t.name;
-      document.getElementById('pnp-artist').textContent = t.artist;
-      document.getElementById('pnp-link').href = t.url || '#';
-      document.getElementById('mini-player').style.display = 'block';
-      document.getElementById('mini-img').src = t.image || '';
-      document.getElementById('mini-track').textContent = t.name;
-      document.getElementById('mini-artist').textContent = t.artist;
-      document.getElementById('mini-wave').classList.toggle('paused', !data.playing);
-    } else {
-      document.getElementById('merged-live').style.display = 'none';
-      document.getElementById('merged-divider').style.display = 'none';
-      document.getElementById('merged-track-section').style.display = 'none';
-      document.getElementById('merged-sub').textContent = 'Not listening to anything right now';
-      document.getElementById('profile-np-card').style.display = 'none';
-      document.getElementById('mini-player').style.display = 'none';
-      clearInterval(progressInterval);
-    }
-  } catch(e) {}
-}
-
-function updateProgress(elapsed, total) {
-  document.getElementById('merged-progress').style.width = Math.min(100, (elapsed/total)*100) + '%';
-  document.getElementById('merged-elapsed').textContent = fmtMs(elapsed);
-}
-
-async function loadFriendsFeed() {
-  const el=document.getElementById('friends-feed');
-  try {
-    const {friends}=await (await fetch(`${API}/social/friends`,{headers:authHeaders()})).json();
-    if(!friends.length){el.innerHTML=`<div class="empty"><p>Follow people to see their activity</p><p style="font-size:11px;margin-top:4px">Go to <b>Following</b> to find people</p></div>`;return;}
-    const colors=['#16a34a','#2563eb','#db2777','#ea580c','#7c3aed','#0891b2'];
-    el.innerHTML=friends.map(f=>{
-      const init=(f.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      const col=colors[Math.abs((f.name||'').length)%colors.length];
-      const av=f.image?`<img src="${f.image}" alt=""/>`:`<span>${init}</span>`;
-      if(f.nowPlaying){const np=f.nowPlaying;return`<div class="friend-activity-card" onclick="window.open('${np.url}','_blank')"><div class="fac-avatar" style="background:${col}">${av}<div class="fac-playing-dot"></div></div><div class="fac-info"><div class="fac-name">${esc(f.name)}</div><div class="fac-track-row">${np.image?`<div class="fac-art"><img src="${np.image}" alt=""/></div>`:''}<div class="fac-track-info"><div class="fac-track">${esc(np.name)}</div><div class="fac-artist">${esc(np.artist)}</div></div><div class="fac-mini-wave"><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div></div></div></div></div>`;}
-      return`<div class="friend-activity-card" style="opacity:.6;cursor:default"><div class="fac-avatar" style="background:${col}">${av}</div><div class="fac-info"><div class="fac-name">${esc(f.name)}</div><div class="fac-idle">Not listening right now</div></div></div>`;
-    }).join('');
-  } catch(e){el.innerHTML='<div class="empty"><p>Could not load friends activity</p></div>';}
-}
-
-async function loadSidebarFriends() {
-  const el=document.getElementById('sidebar-friends');
-  try {
-    const {friends}=await (await fetch(`${API}/social/friends`,{headers:authHeaders()})).json();
-    if(!friends.length){el.innerHTML=`<div style="padding:10px 14px;font-size:11px;color:var(--text3)">No friends yet</div>`;return;}
-    const colors=['#16a34a','#2563eb','#db2777','#ea580c','#7c3aed','#0891b2'];
-    el.innerHTML=friends.map(f=>{
-      const init=(f.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      const col=colors[Math.abs((f.name||'').length)%colors.length];
-      const isPlaying=!!f.nowPlaying;
-      return`<div class="friend-item"><div class="status-ring ${isPlaying?'playing':'offline'}"><div class="av-sm" style="background:${col};color:#fff">${f.image?`<img src="${f.image}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt=""/>`:init}</div></div><div class="friend-info"><div class="friend-name">${esc(f.name)}</div><div class="friend-song">${isPlaying?`🎵 ${esc(f.nowPlaying.name)}`:'Not listening'}</div></div></div>`;
-    }).join('');
-  } catch(e){}
-}
-
-async function loadFollowingPage() {
-  const followEl=document.getElementById('following-list');
-  const discoverEl=document.getElementById('discover-list');
-  try {
-    const [fRes,uRes,iRes]=await Promise.all([
-      fetch(`${API}/social/friends`,{headers:authHeaders()}),
-      fetch(`${API}/social/users`,{headers:authHeaders()}),
-      fetch(`${API}/social/following-ids`,{headers:authHeaders()})
-    ]);
-    const {friends}=await fRes.json();
-    const {users}=await uRes.json();
-    const {following}=await iRes.json();
-    _followingIds=new Set(following);
-    followEl.innerHTML=!friends.length?`<div class="empty" style="padding:20px"><p>You haven't followed anyone yet</p></div>`:`<div class="discover-grid">${friends.map(f=>userCard(f,true)).join('')}</div>`;
-    const notF=users.filter(u=>!_followingIds.has(u.id));
-    discoverEl.innerHTML=!notF.length?`<div style="color:var(--text3);font-size:12px;padding:10px 0">No new people to discover yet!</div>`:notF.map(u=>userCard(u,false)).join('');
-  } catch(e){followEl.innerHTML='<div class="empty"><p>Could not load</p></div>';}
-}
-
-function userCard(u,isFollowing) {
-  const init=(u.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  const colors=['#16a34a','#2563eb','#db2777','#ea580c','#7c3aed','#0891b2'];
-  const col=colors[Math.abs((u.name||'').length)%colors.length];
-  return`<div class="discover-card"><div class="dc-avatar" style="background:${col}">${u.image?`<img src="${u.image}" alt=""/>`:init}</div><div class="dc-info"><div class="dc-name">${esc(u.name)}</div><div class="dc-sub">Waveshare user</div></div><button class="follow-btn ${isFollowing?'following':''}" onclick="toggleFollow('${u.id}',this)">${isFollowing?'Following':'+ Follow'}</button></div>`;
-}
-
-async function toggleFollow(userId,btn) {
-  const isF=btn.classList.contains('following');
-  try {
-    await fetch(`${API}/social/follow/${userId}`,{method:isF?'DELETE':'POST',headers:authHeaders()});
-    if(isF){_followingIds.delete(userId);btn.classList.remove('following');btn.textContent='+ Follow';}
-    else{_followingIds.add(userId);btn.classList.add('following');btn.textContent='Following';}
-    loadSidebarFriends();
-    if(document.getElementById('page-feed').classList.contains('active'))loadFriendsFeed();
-  } catch(e){}
-}
-
-async function loadTop(range,btn) {
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  const tEl=document.getElementById('top-tracks-list');
-  const aEl=document.getElementById('top-artists-grid');
-  if(!tEl||!aEl)return;
-  tEl.innerHTML='<div class="loading">Loading…</div>';aEl.innerHTML='';
-  try {
-    const [tRes,aRes]=await Promise.all([fetch(`${API}/top-tracks?range=${range}`,{headers:authHeaders()}),fetch(`${API}/top-artists?range=${range}`,{headers:authHeaders()})]);
-    const {tracks}=await tRes.json();const {artists}=await aRes.json();
-    tEl.innerHTML=`<div class="track-list">${tracks.map(t=>`<div class="track-item" onclick="window.open('${t.url}','_blank')"><div class="track-rank">${t.rank}</div><div class="track-art">${t.image?`<img src="${t.image}" alt=""/>`:''}</div><div class="track-info"><div class="track-name">${esc(t.name)}</div><div class="track-artist">${esc(t.artist)}</div></div><div class="track-pop"><div class="track-pop-fill" style="width:${t.popularity}%"></div></div></div>`).join('')}</div>`;
-    aEl.innerHTML=artists.map(a=>{const i=a.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();return`<div class="artist-card" onclick="window.open('${a.url}','_blank')"><div class="artist-img">${a.image?`<img src="${a.image}" alt=""/>`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--text3)">${i}</div>`}</div><div class="artist-name">${esc(a.name)}</div><div class="artist-genre">${a.genres.join(' · ')||'Artist'}</div></div>`;}).join('');
-  } catch(e){tEl.innerHTML='<div class="empty"><p>Could not load</p></div>';}
-}
-
-async function loadProfilePage() {
-  const header=document.getElementById('profile-header');
-  const stats=document.getElementById('profile-stats');
-  try {
-    const me=await (await fetch(`${API}/me`,{headers:authHeaders()})).json();
-    header.innerHTML=`<div class="profile-avatar">${me.image?`<img src="${me.image}" alt="${esc(me.name)}">`:(me.name||'?')[0].toUpperCase()}</div><div><div class="profile-name">${esc(me.name||'Spotify User')}</div><div class="profile-handle">@${esc(me.id||'')}</div><a href="https://open.spotify.com/user/${esc(me.id||'')}" target="_blank" class="open-spotify" style="margin-top:10px;display:inline-flex">Open on Spotify ↗</a></div>`;
-    stats.innerHTML=`<div class="stat-card"><div class="stat-label">Followers</div><div class="stat-value">${(me.followers||0).toLocaleString()}</div><div class="stat-sub">on Spotify</div></div><div class="stat-card"><div class="stat-label">Country</div><div class="stat-value" style="font-size:18px">${me.country||'—'}</div><div class="stat-sub">region</div></div><div class="stat-card"><div class="stat-label">Friends</div><div class="stat-value">${_followingIds.size}</div><div class="stat-sub">waveshare</div></div>`;
-  } catch(e){header.innerHTML='<div class="empty"><p>Could not load profile</p></div>';}
-  loadTop('short_term',document.querySelector('.tab-btn'));
-  loadProfileRecent();
-}
-
-async function loadProfileRecent() {
-  const el=document.getElementById('profile-recent');
-  try {
-    const {tracks}=await (await fetch(`${API}/recent`,{headers:authHeaders()})).json();
-    if(!tracks?.length){el.innerHTML='<div class="empty"><p>No recent tracks</p></div>';return;}
-    el.innerHTML=tracks.map(t=>`<div class="recent-item" onclick="window.open('${t.url}','_blank')"><div class="recent-art">${t.image?`<img src="${t.image}" alt=""/>`:''}</div><div class="recent-info"><div class="recent-name">${esc(t.name)}</div><div class="recent-artist">${esc(t.artist)}</div></div><div class="recent-time">${relTime(t.played_at)}</div></div>`).join('');
-  } catch(e){el.innerHTML='<div class="empty"><p>Could not load history</p></div>';}
-}
-
-const pageTitles={feed:'Feed',following:'Following',profile:'My Profile'};
-const pageLoaders={following:loadFollowingPage,profile:loadProfilePage};
-const loaded=new Set(['feed']);
-
-function showPage(name,sidebarEl) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+name)?.classList.add('active');
-  if(sidebarEl)sidebarEl.classList.add('active');
-  document.getElementById('page-title').textContent=pageTitles[name]||name;
-  if(!loaded.has(name)&&pageLoaders[name]){loaded.add(name);pageLoaders[name]();}
-}
-
-function fmtMs(ms){const s=Math.floor(ms/1000);return`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;}
-function relTime(iso){const m=Math.floor((Date.now()-new Date(iso).getTime())/60000);if(m<1)return'just now';if(m<60)return`${m}m ago`;const h=Math.floor(m/60);if(h<24)return`${h}h ago`;return`${Math.floor(h/24)}d ago`;}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-init();
-</script>
-</body>
-</html>
+      <div class="about-footer">
+  
